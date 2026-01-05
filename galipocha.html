@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GaliPocha - Marcador Móvil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset y estilos base - OPTIMIZADO PARA MÓVIL */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --verde-principal: #1a5d1a;
+            --verde-claro: #d4edda;
+            --verde-medio: #28a745;
+            --verde-oscuro: #0d3b0d;
+            --blanco: #FFFFFF;
+            --gris-claro: #f8f9fa;
+            --gris-medio: #e9ecef;
+            --gris-oscuro: #495057;
+            --rojo: #dc3545;
+            --azul: #007bff;
+            --amarillo: #ffc107;
+            --dorado: #ffd700;
+            --naranja: #fd7e14;
+            --sombra: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --borde-radius: 8px;
+            --transicion: all 0.2s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #1a5d1a 0%, #28a745 100%);
+            color: #333;
+            line-height: 1.4;
+            min-height: 100vh;
+            padding: 10px;
+            font-size: 14px; /* REDUCIDO */
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: var(--blanco);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            min-height: calc(100vh - 20px);
+            display: flex;
+            flex-direction: column;
+            border: 2px solid var(--dorado);
+        }
+
+        /* Header optimizado para móvil */
+        .app-header {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-principal));
+            color: var(--blanco);
+            padding: 12px 10px; /* REDUCIDO */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--dorado);
+        }
+
+        .logo-container {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 5px;
+        }
+
+        .logo {
+            font-size: 1.6rem; /* REDUCIDO */
+            font-weight: bold;
+            color: var(--dorado);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .logo .by {
+            font-size: 0.8rem; /* REDUCIDO */
+            color: var(--blanco);
+            font-weight: normal;
+            margin-left: 3px;
+        }
+
+        .logo .ferteam {
+            color: var(--amarillo);
+            font-weight: bold;
+        }
+
+        .app-header .subtitle {
+            font-size: 0.7rem; /* REDUCIDO */
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            font-style: italic;
+            color: var(--gris-claro);
+        }
+
+        /* Indicador de turno más compacto */
+        .turno-indicator {
+            background: linear-gradient(135deg, var(--amarillo), var(--naranja));
+            color: var(--verde-oscuro);
+            padding: 8px 12px; /* REDUCIDO */
+            margin: 0 10px 10px;
+            border-radius: var(--borde-radius);
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem; /* REDUCIDO */
+            box-shadow: var(--sombra);
+            border: 1px solid var(--dorado);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            min-height: 40px;
+        }
+
+        .turno-indicator .turno-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem; /* REDUCIDO */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .turno-indicator .contador-apuestas {
+            background: var(--verde-oscuro);
+            color: var(--blanco);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem; /* REDUCIDO */
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* Secciones más compactas */
+        .section {
+            display: none;
+            flex: 1;
+            padding: 15px; /* REDUCIDO */
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            max-height: calc(100vh - 180px);
+        }
+
+        .section.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Pantalla de Turno optimizada */
+        .turno-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex: 1;
+            padding: 15px 10px; /* REDUCIDO */
+            text-align: center;
+            gap: 12px; /* REDUCIDO */
+        }
+
+        .info-ronda-turno {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px; /* REDUCIDO */
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .info-card-turno {
+            background: var(--gris-claro);
+            padding: 12px; /* REDUCIDO */
+            border-radius: var(--borde-radius);
+            border: 1px solid var(--gris-medio);
+            text-align: center;
+            transition: var(--transicion);
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-card-turno .label {
+            font-size: 0.7rem; /* REDUCIDO */
+            color: var(--gris-oscuro);
+            margin-bottom: 3px;
+            font-weight: 500;
+        }
+
+        .info-card-turno .value {
+            font-size: 1.2rem; /* REDUCIDO */
+            font-weight: bold;
+            color: var(--verde-principal);
+            line-height: 1.2;
+        }
+
+        .info-card-turno .subvalue {
+            font-size: 0.75rem; /* REDUCIDO */
+            color: var(--verde-medio);
+            margin-top: 3px;
+        }
+
+        /* Jugador en turno más compacto */
+        .jugador-turno-container {
+            background: linear-gradient(135deg, var(--verde-claro), var(--blanco));
+            border-radius: var(--borde-radius);
+            padding: 15px; /* REDUCIDO */
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--verde-medio);
+            min-height: 80px;
+        }
+
+        .jugador-turno {
+            font-size: 1.4rem; /* REDUCIDO */
+            color: var(--verde-oscuro);
+            margin-bottom: 5px;
+            font-weight: bold;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pregunta-turno {
+            font-size: 0.9rem; /* REDUCIDO */
+            color: var(--gris-oscuro);
+            line-height: 1.3;
+        }
+
+        /* Información de apuestas acumuladas más compacta */
+        .info-apuestas-acumuladas {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 1px solid var(--azul);
+            border-radius: var(--borde-radius);
+            padding: 12px; /* REDUCIDO */
+            color: var(--verde-oscuro);
+            font-size: 0.85rem; /* REDUCIDO */
+            width: 100%;
+            max-width: 500px;
+            min-height: 70px;
+        }
+
+        .info-apuestas-acumuladas .titulo {
+            font-weight: bold;
+            color: var(--azul);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem; /* REDUCIDO */
+        }
+
+        .info-apuestas-acumuladas .datos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .dato-apuesta {
+            background: var(--blanco);
+            padding: 6px; /* REDUCIDO */
+            border-radius: 6px;
+            border: 1px solid var(--gris-medio);
+            min-height: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .dato-apuesta .label {
+            font-size: 0.65rem; /* REDUCIDO */
+            color: var(--gris-oscuro);
+        }
+
+        .dato-apuesta .valor {
+            font-size: 0.9rem; /* REDUCIDO */
+            font-weight: bold;
+            color: var(--verde-principal);
+        }
+
+        /* Botones de apuesta MUCHO más pequeños */
+        .apuestas-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px; /* REDUCIDO */
+            width: 100%;
+            max-width: 400px;
+            margin: 10px 0;
+        }
+
+        .btn-apuesta {
+            padding: 12px 4px; /* REDUCIDO */
+            font-size: 1.1rem; /* REDUCIDO */
+            font-weight: bold;
+            border: 2px solid var(--gris-medio);
+            border-radius: 8px;
+            background: var(--blanco);
+            color: var(--gris-oscuro);
+            cursor: pointer;
+            transition: var(--transicion);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-apuesta:hover {
+            border-color: var(--verde-medio);
+            background: var(--gris-claro);
+        }
+
+        .btn-apuesta.active {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            border-color: var(--verde-principal);
+            transform: scale(1.05);
+        }
+
+        .btn-apuesta.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: var(--gris-claro);
+            position: relative;
+        }
+
+        .btn-apuesta.disabled::after {
+            content: "✗";
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background: var(--rojo);
+            color: var(--blanco);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        /* Restricción más compacta */
+        .restriccion-info {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid var(--amarillo);
+            border-radius: var(--borde-radius);
+            padding: 12px; /* REDUCIDO */
+            margin: 10px 0;
+            color: var(--verde-oscuro);
+            font-size: 0.85rem; /* REDUCIDO */
+            width: 100%;
+            max-width: 400px;
+            min-height: 60px;
+        }
+
+        .restriccion-info .icono {
+            font-size: 1rem; /* REDUCIDO */
+            color: var(--rojo);
+            margin-bottom: 5px;
+        }
+
+        .restriccion-info .mensaje {
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.8rem; /* REDUCIDO */
+        }
+
+        .restriccion-info .apuesta-prohibida {
+            font-size: 1.4rem; /* REDUCIDO */
+            font-weight: bold;
+            color: var(--rojo);
+            margin: 5px 0;
+            padding: 6px;
+            background: var(--blanco);
+            border-radius: 6px;
+            border: 1px dashed var(--rojo);
+        }
+
+        /* Botones principales más compactos */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            border: none;
+            padding: 12px 16px; /* REDUCIDO */
+            border-radius: var(--borde-radius);
+            font-size: 0.9rem; /* REDUCIDO */
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transicion);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            min-height: 44px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Mesa de juego optimizada para móvil */
+        .mesa-container {
+            display: grid;
+            gap: 8px; /* REDUCIDO */
+            margin: 10px 0;
+            flex: 1;
+            min-height: 300px;
+        }
+
+        .mesa-2 { grid-template-columns: repeat(2, 1fr); }
+        .mesa-3 { grid-template-columns: repeat(3, 1fr); }
+        .mesa-4 { grid-template-columns: repeat(2, 1fr); }
+        .mesa-5 { grid-template-columns: repeat(3, 1fr); }
+        .mesa-6 { grid-template-columns: repeat(3, 1fr); }
+
+        .jugador-card {
+            background: var(--blanco);
+            border-radius: var(--borde-radius);
+            padding: 10px; /* REDUCIDO */
+            box-shadow: var(--sombra);
+            border: 2px solid transparent;
+            transition: var(--transicion);
+            position: relative;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .jugador-card.en-turno {
+            border-color: var(--verde-medio);
+            background: linear-gradient(135deg, var(--blanco), var(--verde-claro));
+            transform: translateY(-2px);
+        }
+
+        .jugador-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--gris-medio);
+        }
+
+        .jugador-nombre {
+            font-weight: 600;
+            color: var(--verde-oscuro);
+            font-size: 0.85rem; /* REDUCIDO */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 65%;
+        }
+
+        .jugador-puntos {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9rem; /* REDUCIDO */
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .jugador-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem; /* REDUCIDO */
+        }
+
+        .apuesta-actual, .bazas-actual {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 28px;
+        }
+
+        .contador-bazas {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-baza {
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: 50%;
+            background: var(--verde-medio);
+            color: var(--blanco);
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bazas-count {
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Panel de control optimizado */
+        .control-panel {
+            background: linear-gradient(135deg, var(--gris-claro), var(--blanco));
+            border-radius: var(--borde-radius);
+            padding: 15px; /* REDUCIDO */
+            margin-top: 10px;
+            border: 1px solid var(--gris-medio);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            margin-bottom: 12px;
+        }
+
+        .info-ronda-actual {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .info-card {
+            background: var(--blanco);
+            padding: 10px;
+            border-radius: var(--borde-radius);
+            border: 1px solid var(--gris-medio);
+            text-align: center;
+            min-height: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-card .label {
+            font-size: 0.7rem;
+            color: var(--gris-oscuro);
+            margin-bottom: 3px;
+        }
+
+        .info-card .value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--verde-principal);
+        }
+
+        .info-card .subvalue {
+            font-size: 0.7rem;
+            color: var(--gris-oscuro);
+            margin-top: 2px;
+        }
+
+        /* Puntuación Parcial optimizada */
+        .puntuacion-parcial-container {
+            background: var(--blanco);
+            border-radius: var(--borde-radius);
+            padding: 12px;
+            margin-top: 12px;
+            border: 1px solid var(--gris-medio);
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .puntuacion-parcial-container h4 {
+            color: var(--verde-oscuro);
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .tabla-puntuacion-parcial {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem; /* REDUCIDO */
+        }
+
+        .tabla-puntuacion-parcial th {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            padding: 6px 4px;
+            text-align: center;
+            font-size: 0.7rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .tabla-puntuacion-parcial td {
+            padding: 6px 4px;
+            border-bottom: 1px solid var(--gris-medio);
+            text-align: center;
+        }
+
+        .tabla-puntuacion-parcial tr:hover {
+            background: var(--gris-claro);
+        }
+
+        /* Mensaje informativo más compacto */
+        .mensaje-apuestas-info {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 1px solid var(--verde-medio);
+            border-radius: var(--borde-radius);
+            padding: 10px;
+            margin-top: 10px;
+            color: var(--verde-oscuro);
+            font-size: 0.8rem;
+            min-height: 50px;
+        }
+
+        .mensaje-apuestas-info .titulo {
+            font-weight: bold;
+            color: var(--verde-principal);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.75rem;
+        }
+
+        .mensaje-apuestas-info .diferencia {
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 5px;
+            background: var(--blanco);
+        }
+
+        /* Acciones ronda - AHORA CON BOTÓN DESHACER */
+        .acciones-ronda {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn-accion {
+            padding: 10px;
+            border-radius: var(--borde-radius);
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transicion);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 40px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--amarillo), var(--naranja));
+            color: var(--verde-oscuro);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--rojo), #c82333);
+            color: var(--blanco);
+        }
+
+        .btn-deshabilitado {
+            background: linear-gradient(135deg, var(--gris-medio), var(--gris-oscuro));
+            color: var(--blanco);
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Botón de deshacer específico */
+        .btn-deshabilitado.deshacer {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        /* Resultados optimizados */
+        .resultados-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 15px 10px;
+            overflow-y: auto;
+        }
+
+        .resultados-container h2 {
+            color: var(--verde-oscuro);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        /* Responsive optimizado para iPhone 15 Pro Max */
+        @media (max-width: 430px) and (max-height: 935px) {
+            .app-container {
+                min-height: calc(100vh - 15px);
+                border-radius: 10px;
+            }
+            
+            .section {
+                padding: 10px;
+                max-height: calc(100vh - 150px);
+            }
+            
+            .turno-screen {
+                padding: 10px 8px;
+                gap: 8px;
+            }
+            
+            .jugador-turno-container {
+                padding: 12px;
+                min-height: 70px;
+            }
+            
+            .jugador-turno {
+                font-size: 1.2rem;
+            }
+            
+            .info-card-turno {
+                padding: 10px;
+                min-height: 55px;
+            }
+            
+            .apuestas-container {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 350px;
+            }
+            
+            .btn-apuesta {
+                padding: 10px 3px;
+                font-size: 1rem;
+                min-height: 45px;
+            }
+            
+            .mesa-container {
+                gap: 6px;
+                min-height: 280px;
+            }
+            
+            .jugador-card {
+                padding: 8px;
+                min-height: 100px;
+            }
+            
+            .control-panel {
+                padding: 12px;
+                max-height: 280px;
+            }
+            
+            .puntuacion-parcial-container {
+                max-height: 160px;
+            }
+        }
+
+        /* Para pantallas muy pequeñas */
+        @media (max-width: 375px) {
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .apuestas-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4px;
+            }
+            
+            .btn-apuesta {
+                padding: 8px 2px;
+                font-size: 0.9rem;
+                min-height: 40px;
+            }
+            
+            .mesa-3, .mesa-5, .mesa-6 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .acciones-ronda {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Clases de utilidad */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Scrollbar minimalista */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gris-claro);
+            border-radius: 2px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--verde-medio);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header optimizado -->
+        <header class="app-header">
+            <div class="logo-container">
+                <div class="logo">
+                    GaliPocha<span class="by">by</span><span class="ferteam">Ferteam</span>
+                </div>
+            </div>
+            <div class="subtitle">Marcador móvil optimizado</div>
+        </header>
+
+        <!-- Indicador de turno -->
+        <div id="turno-indicator" class="turno-indicator hidden">
+            <div class="turno-info">
+                <i class="fas fa-user-clock"></i>
+                <span id="turno-text">Turno de: Jugador 1</span>
+            </div>
+            <div class="contador-apuestas">
+                <span id="contador-apuestas-text">Apuestas: 0/6</span>
+            </div>
+        </div>
+
+        <!-- Menú Principal -->
+        <section id="menu-section" class="section active">
+            <div class="turno-screen">
+                <div class="info-ronda-turno">
+                    <div class="info-card-turno">
+                        <div class="label">Jugadores</div>
+                        <div class="value" id="menu-jugadores">6</div>
+                        <div class="subvalue">Toca para cambiar</div>
+                    </div>
+                    <div class="info-card-turno">
+                        <div class="label">Rondas Totales</div>
+                        <div class="value" id="menu-rondas">24</div>
+                        <div class="subvalue">Para 6 jugadores</div>
+                    </div>
+                </div>
+
+                <div style="width: 100%; max-width: 350px; margin: 10px auto;">
+                    <div style="color: var(--verde-principal); margin-bottom: 10px; text-align: center; font-size: 0.9rem;">
+                        <i class="fas fa-users"></i> Selecciona jugadores
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;">
+                        <button class="btn-apuesta" data-jugadores="2" style="font-size: 0.9rem; padding: 8px 4px; min-height: 40px; width: 50px;">2</button>
+                        <button class="btn-apuesta" data-jugadores="3" style="font-size: 0.9rem; padding: 8px 4px; min-height: 40px; width: 50px;">3</button>
+                        <button class="btn-apuesta" data-jugadores="4" style="font-size: 0.9rem; padding: 8px 4px; min-height: 40px; width: 50px;">4</button>
+                        <button class="btn-apuesta active" data-jugadores="5" style="font-size: 0.9rem; padding: 8px 4px; min-height: 40px; width: 50px;">5</button>
+                        <button class="btn-apuesta" data-jugadores="6" style="font-size: 0.9rem; padding: 8px 4px; min-height: 40px; width: 50px;">6</button>
+                    </div>
+                </div>
+
+                <div class="info-apuestas-acumuladas" style="margin-top: 15px;">
+                    <div class="titulo">
+                        <i class="fas fa-star"></i> Sistema de Puntuación
+                    </div>
+                    <div class="datos">
+                        <div class="dato-apuesta">
+                            <div class="label">Apuesta 0</div>
+                            <div class="valor">+10</div>
+                        </div>
+                        <div class="dato-apuesta">
+                            <div class="label">Apuesta 1</div>
+                            <div class="valor">+15</div>
+                        </div>
+                        <div class="dato-apuesta">
+                            <div class="label">Apuesta 2</div>
+                            <div class="valor">+20</div>
+                        </div>
+                        <div class="dato-apuesta">
+                            <div class="label">Apuesta 3</div>
+                            <div class="valor">+25</div>
+                        </div>
+                        <div class="dato-apuesta">
+                            <div class="label">Apuesta 4</div>
+                            <div class="valor">+30</div>
+                        </div>
+                        <div class="dato-apuesta">
+                            <div class="label">Apuesta 5</div>
+                            <div class="valor">+35</div>
+                        </div>
+                        <div class="dato-apuesta">
+                            <div class="label">Apuesta 6</div>
+                            <div class="valor">+40</div>
+                        </div>
+                        <div class="dato-apuesta" style="background: linear-gradient(135deg, #ffcccc, #ff9999);">
+                            <div class="label">Fallo</div>
+                            <div class="valor">-5 c/u</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="btn-continuar-config" class="btn-primary mt-10" style="max-width: 350px; margin: 15px auto 0;">
+                    <i class="fas fa-arrow-right"></i> Configurar Partida
+                </button>
+            </div>
+        </section>
+
+        <!-- Configuración de Nombres -->
+        <section id="config-section" class="section">
+            <div class="turno-screen">
+                <div style="color: var(--verde-oscuro); margin-bottom: 15px; text-align: center; font-size: 1.1rem;">
+                    <i class="fas fa-cog"></i> Configurar Jugadores
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 10px 0; width: 100%; max-width: 400px;">
+                    <!-- Los inputs se generan dinámicamente -->
+                </div>
+
+                <div class="info-apuestas-acumuladas" style="margin: 15px 0;">
+                    <div class="titulo">
+                        <i class="fas fa-info-circle"></i> Información
+                    </div>
+                    <div style="margin-top: 8px; font-size: 0.8rem;">
+                        <p><strong>Jugadores:</strong> <span id="resumen-jugadores">6</span></p>
+                        <p><strong>Rondas:</strong> <span id="resumen-rondas">24</span></p>
+                        <p><strong>Sistema:</strong> Turnos rotativos</p>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; width: 100%; max-width: 400px;">
+                    <button id="btn-volver-menu" class="btn-primary" style="background: linear-gradient(135deg, #6c757d, #495057); flex: 1;">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </button>
+                    <button id="btn-iniciar-partida" class="btn-primary" style="flex: 1;">
+                        <i class="fas fa-play"></i> ¡Comenzar!
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pantalla de Turno -->
+        <section id="turno-section" class="section">
+            <div class="turno-screen">
+                <div class="info-ronda-turno">
+                    <div class="info-card-turno">
+                        <div class="label">Ronda</div>
+                        <div class="value" id="turno-ronda">1</div>
+                        <div class="subvalue">de <span id="turno-total">24</span></div>
+                    </div>
+                    <div class="info-card-turno">
+                        <div class="label">Cartas</div>
+                        <div class="value" id="turno-cartas">1</div>
+                        <div class="subvalue">Fase: <span id="turno-fase">Asc.</span></div>
+                    </div>
+                </div>
+
+                <div class="jugador-turno-container">
+                    <div class="jugador-turno" id="jugador-turno">
+                        Jugador 1
+                    </div>
+                    <div class="pregunta-turno" id="pregunta-turno">
+                        ¿Cuántas bazas vas a ganar?
+                    </div>
+                </div>
+
+                <!-- Información de apuestas acumuladas -->
+                <div class="info-apuestas-acumuladas">
+                    <div class="titulo">
+                        <i class="fas fa-chart-line"></i> Resumen
+                    </div>
+                    <div class="datos">
+                        <div class="dato-apuesta">
+                            <div class="label">Hechas</div>
+                            <div class="valor" id="apuestas-realizadas">0</div>
+                        </div>
+                        <div class="dato-apuesta">
+                            <div class="label">Suma</div>
+                            <div class="valor" id="suma-apuestas">0</div>
+                        </div>
+                        <div class="dato-apuesta">
+                            <div class="label">Ronda</div>
+                            <div class="valor" id="numero-ronda">1</div>
+                        </div>
+                        <div class="dato-apuesta" id="container-apuesta-restante">
+                            <div class="label">Restan</div>
+                            <div class="valor" id="apuestas-restantes">6</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="apuestas-container" id="apuestas-container">
+                    <!-- Los botones de apuesta se generan dinámicamente -->
+                </div>
+
+                <!-- Restricción para último jugador -->
+                <div id="restriccion-info" class="restriccion-info hidden">
+                    <div class="icono">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="mensaje">
+                        <strong>Último jugador</strong>
+                    </div>
+                    <div style="font-size: 0.75rem;">
+                        Suma NO puede ser: <span id="ronda-numero">1</span>
+                    </div>
+                    <div class="apuesta-prohibida" id="apuesta-prohibida">
+                        0
+                    </div>
+                </div>
+
+                <!-- BOTÓN DESHACER AÑADIDO -->
+                <div style="display: flex; gap: 8px; width: 100%; max-width: 400px;">
+                    <button id="btn-deshacer-turno" class="btn-primary" style="background: linear-gradient(135deg, #6c757d, #495057); flex: 1;">
+                        <i class="fas fa-undo"></i> Deshacer
+                    </button>
+                    <button id="btn-confirmar-apuesta" class="btn-primary" disabled style="flex: 2;">
+                        <i class="fas fa-check-circle"></i> Confirmar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marcador Principal -->
+        <section id="marcador-section" class="section">
+            <div class="mesa-container" id="mesa-container">
+                <!-- Los jugadores se generan dinámicamente -->
+            </div>
+
+            <!-- Panel de Control -->
+            <div class="control-panel">
+                <div class="panel-header">
+                    <div class="info-ronda-actual">
+                        <div class="info-card">
+                            <div class="label">Ronda</div>
+                            <div class="value" id="current-ronda">1</div>
+                            <div class="subvalue">de <span id="current-total">24</span></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="label">Fase</div>
+                            <div class="value" id="current-fase">Asc.</div>
+                            <div class="subvalue"><span id="current-cartas">1</span> carta</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensaje informativo sobre apuestas de más/menos -->
+                <div id="mensaje-apuestas-info" class="mensaje-apuestas-info hidden">
+                    <!-- Se llena dinámicamente -->
+                </div>
+
+                <!-- Puntuación Parcial -->
+                <div class="puntuacion-parcial-container">
+                    <h4><i class="fas fa-chart-bar"></i> Clasificación</h4>
+                    <table class="tabla-puntuacion-parcial" id="tabla-puntuacion-parcial">
+                        <!-- Se llena dinámicamente -->
+                    </table>
+                </div>
+
+                <!-- Acciones ronda - SIN BOTÓN JUGAR RONDA -->
+                <div class="acciones-ronda">
+                    <button id="btn-siguiente-ronda" class="btn-primary">
+                        <i class="fas fa-forward"></i> Siguiente
+                    </button>
+                    <button id="btn-ver-resultados" class="btn-accion btn-warning">
+                        <i class="fas fa-chart-bar"></i> Ver
+                    </button>
+                    <button id="btn-deshacer-ronda" class="btn-accion btn-deshabilitado deshacer">
+                        <i class="fas fa-undo"></i> Deshacer Ronda
+                    </button>
+                    <button id="btn-finalizar-partida" class="btn-accion btn-danger">
+                        <i class="fas fa-flag"></i> Finalizar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resultados Finales -->
+        <section id="resultados-section" class="section">
+            <div class="turno-screen">
+                <div style="color: var(--verde-oscuro); margin-bottom: 15px; text-align: center; font-size: 1.2rem;">
+                    <i class="fas fa-trophy"></i> Resultados Finales
+                </div>
+                
+                <div id="tabla-resultados" style="width: 100%; max-width: 400px;">
+                    <!-- Los resultados se generan dinámicamente -->
+                </div>
+                
+                <div style="display: flex; gap: 10px; width: 100%; max-width: 400px; margin-top: 20px;">
+                    <button id="btn-nueva-partida" class="btn-primary" style="flex: 1;">
+                        <i class="fas fa-plus"></i> Nueva
+                    </button>
+                    <button id="btn-imprimir" class="btn-primary" style="background: linear-gradient(135deg, #6c757d, #495057); flex: 1;">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        class GaliPochaApp {
+            constructor() {
+                this.jugadores = 6;
+                this.jugadoresData = [];
+                this.rondas = [];
+                this.rondaActual = 1;
+                this.turnoActual = 0;
+                this.apuestasRonda = [];
+                this.totalRondas = 24;
+                this.partidaActiva = false;
+                this.modoTurno = false;
+                this.iniciadorRondaActual = 0;
+                this.historialApuestas = []; // Para poder deshacer
+                
+                // Sistema de puntuación personalizado
+                this.puntuaciones = {
+                    0: 10,   // Apuesta 0: 10 puntos
+                    1: 15,   // Apuesta 1: 15 puntos
+                    2: 20,   // Apuesta 2: 20 puntos
+                    3: 25,   // Apuesta 3: 25 puntos
+                    4: 30,   // Apuesta 4: 30 puntos
+                    5: 35,   // Apuesta 5: 35 puntos
+                    6: 40    // Apuesta 6: 40 puntos
+                };
+                
+                this.penalizacionPorFallar = 5; // -5 puntos por cada apuesta fallada
+                
+                this.init();
+            }
+
+            init() {
+                this.cacheDOM();
+                this.bindEvents();
+                this.actualizarInfoPartida();
+            }
+
+            cacheDOM() {
+                // Secciones
+                this.menuSection = document.getElementById('menu-section');
+                this.configSection = document.getElementById('config-section');
+                this.turnoSection = document.getElementById('turno-section');
+                this.marcadorSection = document.getElementById('marcador-section');
+                this.resultadosSection = document.getElementById('resultados-section');
+                this.turnoIndicator = document.getElementById('turno-indicator');
+                this.contadorApuestasText = document.getElementById('contador-apuestas-text');
+                
+                // Menú
+                this.btnJugadores = document.querySelectorAll('.btn-apuesta[data-jugadores]');
+                this.btnContinuarConfig = document.getElementById('btn-continuar-config');
+                this.menuJugadores = document.getElementById('menu-jugadores');
+                this.menuRondas = document.getElementById('menu-rondas');
+                
+                // Configuración
+                this.inputsNombres = document.querySelector('#config-section > div > div:nth-child(2)');
+                this.btnVolverMenu = document.getElementById('btn-volver-menu');
+                this.btnIniciarPartida = document.getElementById('btn-iniciar-partida');
+                
+                // Turno
+                this.jugadorTurnoElement = document.getElementById('jugador-turno');
+                this.preguntaTurnoElement = document.getElementById('pregunta-turno');
+                this.apuestasContainer = document.getElementById('apuestas-container');
+                this.restriccionInfo = document.getElementById('restriccion-info');
+                this.apuestaProhibidaElement = document.getElementById('apuesta-prohibida');
+                this.rondaNumeroElement = document.getElementById('ronda-numero');
+                this.btnConfirmarApuesta = document.getElementById('btn-confirmar-apuesta');
+                this.btnDeshacerTurno = document.getElementById('btn-deshacer-turno'); // NUEVO
+                
+                // Información de apuestas acumuladas
+                this.apuestasRealizadasElement = document.getElementById('apuestas-realizadas');
+                this.sumaApuestasElement = document.getElementById('suma-apuestas');
+                this.numeroRondaElement = document.getElementById('numero-ronda');
+                this.apuestasRestantesElement = document.getElementById('apuestas-restantes');
+                this.containerApuestaRestante = document.getElementById('container-apuesta-restante');
+                
+                // Info ronda turno
+                this.turnoRondaElement = document.getElementById('turno-ronda');
+                this.turnoTotalElement = document.getElementById('turno-total');
+                this.turnoCartasElement = document.getElementById('turno-cartas');
+                this.turnoFaseElement = document.getElementById('turno-fase');
+                
+                // Marcador
+                this.mesaContainer = document.getElementById('mesa-container');
+                this.btnSiguienteRonda = document.getElementById('btn-siguiente-ronda');
+                this.btnVerResultados = document.getElementById('btn-ver-resultados');
+                this.btnDeshacerRonda = document.getElementById('btn-deshacer-ronda'); // NUEVO
+                this.btnFinalizarPartida = document.getElementById('btn-finalizar-partida');
+                
+                // Puntuación parcial y mensaje informativo
+                this.mensajeApuestasInfo = document.getElementById('mensaje-apuestas-info');
+                this.tablaPuntuacionParcial = document.getElementById('tabla-puntuacion-parcial');
+                
+                // Resultados
+                this.btnNuevaPartida = document.getElementById('btn-nueva-partida');
+                this.btnImprimir = document.getElementById('btn-imprimir');
+                
+                // Info
+                this.resumenJugadores = document.getElementById('resumen-jugadores');
+                this.resumenRondas = document.getElementById('resumen-rondas');
+                
+                // Current info
+                this.currentRondaElement = document.getElementById('current-ronda');
+                this.currentTotalElement = document.getElementById('current-total');
+                this.currentFaseElement = document.getElementById('current-fase');
+                this.currentCartasElement = document.getElementById('current-cartas');
+            }
+
+            bindEvents() {
+                // Menú principal
+                this.btnJugadores.forEach(btn => {
+                    btn.addEventListener('click', (e) => this.seleccionarJugadores(e));
+                });
+                
+                this.btnContinuarConfig.addEventListener('click', () => this.irAConfiguracion());
+                
+                // Configuración
+                this.btnVolverMenu.addEventListener('click', () => this.irAMenu());
+                this.btnIniciarPartida.addEventListener('click', () => this.iniciarPartida());
+                
+                // Turno
+                this.btnConfirmarApuesta.addEventListener('click', () => this.confirmarApuesta());
+                this.btnDeshacerTurno.addEventListener('click', () => this.deshacerTurno()); // NUEVO
+                
+                // Marcador
+                this.btnSiguienteRonda.addEventListener('click', () => this.siguienteRonda());
+                this.btnVerResultados.addEventListener('click', () => this.verResultadosParciales());
+                this.btnDeshacerRonda.addEventListener('click', () => this.deshacerRonda()); // NUEVO
+                this.btnFinalizarPartida.addEventListener('click', () => this.finalizarPartida());
+                
+                // Resultados
+                this.btnNuevaPartida.addEventListener('click', () => this.nuevaPartida());
+                this.btnImprimir.addEventListener('click', () => window.print());
+            }
+
+            seleccionarJugadores(event) {
+                const jugadores = parseInt(event.target.dataset.jugadores);
+                this.jugadores = jugadores;
+                
+                // Actualizar botones
+                this.btnJugadores.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (parseInt(btn.dataset.jugadores) === jugadores) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // Actualizar info
+                this.actualizarInfoPartida();
+            }
+
+            actualizarInfoPartida() {
+                this.menuJugadores.textContent = this.jugadores;
+                this.resumenJugadores.textContent = this.jugadores;
+                
+                // Calcular rondas según número de jugadores
+                if (this.jugadores === 6) {
+                    this.totalRondas = 24;
+                    this.menuRondas.textContent = '24';
+                    this.resumenRondas.textContent = '24';
+                } else if (this.jugadores === 4) {
+                    this.totalRondas = 20;
+                    this.menuRondas.textContent = '20';
+                    this.resumenRondas.textContent = '20';
+                } else {
+                    this.totalRondas = 15;
+                    this.menuRondas.textContent = '15';
+                    this.resumenRondas.textContent = '15';
+                }
+            }
+
+            irAConfiguracion() {
+                this.generarInputsNombres();
+                this.mostrarSeccion('config');
+            }
+
+            irAMenu() {
+                this.mostrarSeccion('menu');
+            }
+
+            generarInputsNombres() {
+                let html = '';
+                for (let i = 1; i <= this.jugadores; i++) {
+                    html += `
+                        <input type="text" id="nombre-j${i}" 
+                               placeholder="Jugador ${i}" 
+                               value="Jugador ${i}"
+                               maxlength="12"
+                               style="width: 100%; padding: 10px; border: 1px solid var(--gris-medio); border-radius: 6px; font-size: 0.9rem;">
+                    `;
+                }
+                this.inputsNombres.innerHTML = html;
+            }
+
+            iniciarPartida() {
+                // Obtener nombres de jugadores
+                this.jugadoresData = [];
+                for (let i = 1; i <= this.jugadores; i++) {
+                    const input = document.getElementById(`nombre-j${i}`);
+                    const nombre = input ? input.value.trim() || `Jugador ${i}` : `Jugador ${i}`;
+                    
+                    this.jugadoresData.push({
+                        id: i,
+                        nombre: nombre,
+                        puntos: 0,
+                        apuestaActual: null,
+                        bazasActual: 0,
+                        historial: [],
+                        orden: i,
+                        historialApuestas: [] // Para deshacer
+                    });
+                }
+                
+                // Inicializar partida
+                this.rondas = [];
+                this.rondaActual = 1;
+                this.turnoActual = 0;
+                this.iniciadorRondaActual = 0;
+                this.apuestasRonda = [];
+                this.historialApuestas = [];
+                this.partidaActiva = true;
+                this.modoTurno = false;
+                
+                // Generar mesa de juego
+                this.generarMesa();
+                
+                // Actualizar UI
+                this.actualizarInfoRonda();
+                this.mostrarSeccion('marcador');
+                this.turnoIndicator.classList.add('hidden');
+                
+                // Actualizar puntuación parcial
+                this.actualizarPuntuacionParcial();
+                
+                // Iniciar primera ronda
+                this.iniciarTurnos();
+            }
+
+            generarMesa() {
+                // Limpiar mesa
+                this.mesaContainer.innerHTML = '';
+                this.mesaContainer.className = 'mesa-container';
+                
+                // Añadir clase según número de jugadores
+                this.mesaContainer.classList.add(`mesa-${this.jugadores}`);
+                
+                // Generar tarjetas de jugadores
+                this.jugadoresData.forEach(jugador => {
+                    const card = document.createElement('div');
+                    card.className = 'jugador-card';
+                    card.dataset.id = jugador.id;
+                    
+                    card.innerHTML = `
+                        <div class="jugador-header">
+                            <div class="jugador-nombre" title="${jugador.nombre}">${jugador.nombre}</div>
+                            <div class="jugador-puntos">${jugador.puntos}</div>
+                        </div>
+                        <div class="jugador-body">
+                            <div class="apuesta-actual">
+                                <span>Apuesta:</span>
+                                <span class="apuesta-value" id="apuesta-j${jugador.id}">-</span>
+                            </div>
+                            <div class="bazas-actual">
+                                <span>Bazas:</span>
+                                <div class="contador-bazas">
+                                    <button class="btn-baza" data-action="minus" data-id="${jugador.id}">-</button>
+                                    <span class="bazas-count" id="bazas-j${jugador.id}">0</span>
+                                    <button class="btn-baza" data-action="plus" data-id="${jugador.id}">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    this.mesaContainer.appendChild(card);
+                });
+                
+                // Asignar eventos a los botones de bazas
+                this.asignarEventosBazas();
+            }
+
+            asignarEventosBazas() {
+                document.querySelectorAll('.btn-baza').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        if (!this.modoTurno) {
+                            const jugadorId = parseInt(e.target.dataset.id);
+                            const action = e.target.dataset.action;
+                            this.actualizarBazas(jugadorId, action);
+                        }
+                    });
+                });
+            }
+
+            actualizarBazas(jugadorId, action) {
+                const jugador = this.jugadoresData.find(j => j.id === jugadorId);
+                if (!jugador) return;
+                
+                const cartasPorRonda = this.calcularCartasPorRonda();
+                const maxBazas = cartasPorRonda;
+                
+                if (action === 'plus' && jugador.bazasActual < maxBazas) {
+                    jugador.bazasActual++;
+                } else if (action === 'minus' && jugador.bazasActual > 0) {
+                    jugador.bazasActual--;
+                }
+                
+                // Actualizar UI
+                const countElement = document.getElementById(`bazas-j${jugadorId}`);
+                if (countElement) {
+                    countElement.textContent = jugador.bazasActual;
+                }
+                
+                // Actualizar puntuación parcial
+                this.actualizarPuntuacionParcial();
+            }
+
+            iniciarTurnos() {
+                this.modoTurno = true;
+                
+                // Calcular el índice del jugador que inicia esta ronda
+                const indiceIniciador = (this.rondaActual - 1) % this.jugadores;
+                
+                // El turno actual es el iniciador
+                this.turnoActual = indiceIniciador;
+                this.apuestasRonda = [];
+                this.historialApuestas = []; // Limpiar historial para nueva ronda
+                this.restriccionInfo.classList.add('hidden');
+                
+                // Actualizar contador de apuestas
+                this.actualizarContadorApuestas();
+                
+                // Mostrar indicador de turno
+                this.turnoIndicator.classList.remove('hidden');
+                this.turnoIndicator.querySelector('#turno-text').textContent = `Ronda ${this.rondaActual}`;
+                
+                // Ocultar mensaje informativo de apuestas
+                this.mensajeApuestasInfo.classList.add('hidden');
+                
+                // Ir a la pantalla de turno
+                this.siguienteTurno();
+            }
+
+            siguienteTurno() {
+                // Calcular índice del jugador actual considerando el orden rotativo
+                const jugadorIndex = (this.iniciadorRondaActual + this.apuestasRonda.length) % this.jugadores;
+                const jugador = this.jugadoresData[jugadorIndex];
+                
+                // Actualizar indicador de turno
+                this.turnoIndicator.querySelector('#turno-text').textContent = `Turno: ${jugador.nombre}`;
+                
+                // Mostrar pantalla de turno
+                this.mostrarPantallaTurno(jugador);
+            }
+
+            mostrarPantallaTurno(jugador) {
+                // Actualizar información de ronda
+                this.turnoRondaElement.textContent = this.rondaActual;
+                this.turnoTotalElement.textContent = this.totalRondas;
+                this.turnoCartasElement.textContent = this.calcularCartasPorRonda();
+                this.turnoFaseElement.textContent = this.getFaseAbreviada();
+                
+                // Mostrar jugador actual
+                this.jugadorTurnoElement.textContent = jugador.nombre;
+                this.preguntaTurnoElement.textContent = `Ronda ${this.rondaActual} - ¿Bazas?`;
+                
+                // Actualizar información de apuestas acumuladas
+                this.actualizarInfoApuestasAcumuladas();
+                
+                // Generar botones de apuesta
+                this.generarBotonesApuesta(jugador);
+                
+                // Actualizar tarjetas de jugadores
+                this.actualizarTarjetasJugadores();
+                
+                // Mostrar sección de turno
+                this.mostrarSeccion('turno');
+            }
+
+            actualizarInfoApuestasAcumuladas() {
+                const apuestasRealizadas = this.apuestasRonda.length;
+                const sumaApuestas = this.apuestasRonda.reduce((sum, apuesta) => sum + apuesta.apuesta, 0);
+                const apuestasRestantes = this.jugadores - apuestasRealizadas;
+                
+                this.apuestasRealizadasElement.textContent = apuestasRealizadas;
+                this.sumaApuestasElement.textContent = sumaApuestas;
+                this.numeroRondaElement.textContent = this.rondaActual;
+                this.apuestasRestantesElement.textContent = apuestasRestantes;
+                
+                // Actualizar contador en el indicador
+                this.contadorApuestasText.textContent = `${apuestasRealizadas}/${this.jugadores}`;
+                
+                // Cambiar color si es el último jugador
+                if (apuestasRestantes === 1) {
+                    this.containerApuestaRestante.style.background = 'linear-gradient(135deg, #fff3cd, #ffeaa7)';
+                    this.containerApuestaRestante.style.border = '1px solid var(--amarillo)';
+                } else {
+                    this.containerApuestaRestante.style.background = '';
+                    this.containerApuestaRestante.style.border = '';
+                }
+            }
+
+            generarBotonesApuesta(jugador) {
+                this.apuestasContainer.innerHTML = '';
+                const cartasPorRonda = this.calcularCartasPorRonda();
+                const apuestasRealizadas = this.apuestasRonda.length;
+                const esUltimoJugador = apuestasRealizadas === this.jugadores - 1;
+                
+                // Calcular suma de apuestas anteriores
+                const sumaApuestasAnteriores = this.apuestasRonda.reduce((sum, apuesta) => sum + apuesta.apuesta, 0);
+                
+                // CORRECCIÓN: Calcular la apuesta prohibida según cartas por ronda
+                let apuestaProhibida = null;
+                if (esUltimoJugador) {
+                    // La suma NO puede ser igual al número de cartas por ronda
+                    apuestaProhibida = this.calcularCartasPorRonda() - sumaApuestasAnteriores;
+                }
+                
+                // Generar botones del 0 al número máximo de cartas
+                for (let apuesta = 0; apuesta <= cartasPorRonda; apuesta++) {
+                    const button = document.createElement('button');
+                    button.className = 'btn-apuesta';
+                    button.textContent = apuesta;
+                    button.dataset.apuesta = apuesta;
+                    
+                    // Deshabilitar botón si es el último jugador y la apuesta está prohibida
+                    if (esUltimoJugador && apuesta === apuestaProhibida) {
+                        button.classList.add('disabled');
+                        button.title = `Esta apuesta haría que la suma total sea ${this.calcularCartasPorRonda()}, lo cual no está permitido`;
+                    }
+                    
+                    button.addEventListener('click', () => this.seleccionarApuesta(apuesta, button));
+                    
+                    this.apuestasContainer.appendChild(button);
+                }
+                
+                // Mostrar información de restricción para el último jugador
+                if (esUltimoJugador && apuestaProhibida >= 0 && apuestaProhibida <= cartasPorRonda) {
+                    this.apuestaProhibidaElement.textContent = apuestaProhibida;
+                    this.rondaNumeroElement.textContent = this.calcularCartasPorRonda();
+                    this.restriccionInfo.classList.remove('hidden');
+                } else {
+                    this.restriccionInfo.classList.add('hidden');
+                }
+                
+                // Habilitar/deshabilitar botón de confirmar
+                this.btnConfirmarApuesta.disabled = true;
+            }
+
+            seleccionarApuesta(apuesta, button) {
+                // Si el botón está deshabilitado, no hacer nada
+                if (button.classList.contains('disabled')) {
+                    alert(`Esta apuesta no está permitida porque haría que la suma total sea igual a ${this.calcularCartasPorRonda()}.`);
+                    return;
+                }
+                
+                // Remover clase active de todos los botones
+                document.querySelectorAll('.btn-apuesta').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Añadir clase active al botón seleccionado
+                button.classList.add('active');
+                
+                // Guardar apuesta temporal
+                this.apuestaTemporal = apuesta;
+                
+                // Habilitar botón de confirmar
+                this.btnConfirmarApuesta.disabled = false;
+            }
+
+            confirmarApuesta() {
+                if (typeof this.apuestaTemporal === 'undefined') {
+                    alert('Selecciona una apuesta antes de confirmar.');
+                    return;
+                }
+                
+                const apuestasRealizadas = this.apuestasRonda.length;
+                const jugadorIndex = (this.iniciadorRondaActual + apuestasRealizadas) % this.jugadores;
+                const jugador = this.jugadoresData[jugadorIndex];
+                const apuesta = this.apuestaTemporal;
+                
+                // Guardar en historial para poder deshacer
+                this.historialApuestas.push({
+                    jugadorId: jugador.id,
+                    apuestaAnterior: jugador.apuestaActual,
+                    apuestaNueva: apuesta
+                });
+                
+                // Guardar apuesta
+                jugador.apuestaActual = apuesta;
+                this.apuestasRonda.push({
+                    jugadorId: jugador.id,
+                    jugadorNombre: jugador.nombre,
+                    apuesta: apuesta
+                });
+                
+                // Actualizar UI en la mesa
+                const apuestaElement = document.getElementById(`apuesta-j${jugador.id}`);
+                if (apuestaElement) {
+                    apuestaElement.textContent = apuesta;
+                    apuestaElement.style.color = 'var(--verde-medio)';
+                    apuestaElement.style.fontWeight = 'bold';
+                }
+                
+                // Actualizar contador de apuestas
+                this.actualizarContadorApuestas();
+                
+                // Limpiar apuesta temporal
+                this.apuestaTemporal = undefined;
+                this.btnConfirmarApuesta.disabled = true;
+                
+                // Actualizar tarjetas
+                this.actualizarTarjetasJugadores();
+                
+                // Verificar si ya todos apostaron
+                if (this.apuestasRonda.length < this.jugadores) {
+                    this.siguienteTurno();
+                } else {
+                    this.finalizarTurnos();
+                }
+            }
+
+            // NUEVO: Deshacer último turno
+            deshacerTurno() {
+                if (this.apuestasRonda.length === 0) {
+                    alert('No hay apuestas para deshacer.');
+                    return;
+                }
+                
+                if (confirm('¿Deshacer la última apuesta?')) {
+                    // Obtener última apuesta del historial
+                    const ultimoHistorial = this.historialApuestas.pop();
+                    if (!ultimoHistorial) return;
+                    
+                    // Encontrar jugador y restaurar apuesta anterior
+                    const jugador = this.jugadoresData.find(j => j.id === ultimoHistorial.jugadorId);
+                    if (jugador) {
+                        jugador.apuestaActual = ultimoHistorial.apuestaAnterior;
+                        
+                        // Actualizar UI
+                        const apuestaElement = document.getElementById(`apuesta-j${jugador.id}`);
+                        if (apuestaElement) {
+                            apuestaElement.textContent = ultimoHistorial.apuestaAnterior !== null ? ultimoHistorial.apuestaAnterior : '-';
+                            apuestaElement.style.color = '';
+                            apuestaElement.style.fontWeight = '';
+                        }
+                    }
+                    
+                    // Remover última apuesta del array
+                    this.apuestasRonda.pop();
+                    
+                    // Actualizar contadores
+                    this.actualizarContadorApuestas();
+                    
+                    // Volver al turno anterior
+                    this.siguienteTurno();
+                }
+            }
+
+            // NUEVO: Deshacer ronda completa
+            deshacerRonda() {
+                if (this.rondaActual === 1 && this.apuestasRonda.length === 0) {
+                    alert('No hay nada para deshacer.');
+                    return;
+                }
+                
+                if (confirm('¿Deshacer toda la ronda actual y volver a empezar?')) {
+                    // Reiniciar apuestas de todos los jugadores
+                    this.jugadoresData.forEach(jugador => {
+                        jugador.apuestaActual = null;
+                        jugador.bazasActual = 0;
+                        
+                        // Actualizar UI
+                        const apuestaElement = document.getElementById(`apuesta-j${jugador.id}`);
+                        if (apuestaElement) {
+                            apuestaElement.textContent = '-';
+                            apuestaElement.style.color = '';
+                            apuestaElement.style.fontWeight = '';
+                        }
+                        
+                        const bazasElement = document.getElementById(`bazas-j${jugador.id}`);
+                        if (bazasElement) {
+                            bazasElement.textContent = '0';
+                        }
+                    });
+                    
+                    // Reiniciar arrays
+                    this.apuestasRonda = [];
+                    this.historialApuestas = [];
+                    
+                    // Actualizar contadores
+                    this.actualizarContadorApuestas();
+                    
+                    // Ocultar mensaje informativo
+                    this.mensajeApuestasInfo.classList.add('hidden');
+                    
+                    // Actualizar puntuación parcial
+                    this.actualizarPuntuacionParcial();
+                    
+                    // Reiniciar turnos para esta ronda
+                    this.iniciarTurnos();
+                }
+            }
+
+            actualizarContadorApuestas() {
+                const apuestasRealizadas = this.apuestasRonda.length;
+                this.contadorApuestasText.textContent = `${apuestasRealizadas}/${this.jugadores}`;
+            }
+
+            finalizarTurnos() {
+                this.modoTurno = false;
+                this.turnoIndicator.classList.add('hidden');
+                
+                // Calcular suma total de apuestas
+                const sumaApuestas = this.apuestasRonda.reduce((sum, a) => sum + a.apuesta, 0);
+                const cartasPorRonda = this.calcularCartasPorRonda();
+                
+                // CORRECCIÓN: Verificar que la suma de apuestas no sea igual al número de cartas por ronda
+                if (sumaApuestas === cartasPorRonda) {
+                    alert(`¡Error! La suma de apuestas es igual a ${cartasPorRonda} (cartas por ronda). Esto no debería ocurrir.`);
+                    return;
+                }
+                
+                // Calcular diferencia respecto al número de cartas por ronda
+                const diferencia = sumaApuestas - cartasPorRonda;
+                
+                // Mostrar mensaje informativo sobre apuestas de más/menos
+                this.mostrarMensajeApuestasInfo(diferencia, sumaApuestas, cartasPorRonda);
+                
+                // Actualizar iniciador para la siguiente ronda (siguiente jugador)
+                this.iniciadorRondaActual = (this.iniciadorRondaActual + 1) % this.jugadores;
+                
+                // Actualizar puntuación parcial
+                this.actualizarPuntuacionParcial();
+                
+                // Volver al marcador principal
+                this.mostrarSeccion('marcador');
+                
+                alert(`Apuestas registradas!\nSuma: ${sumaApuestas}\nCartas/ronda: ${cartasPorRonda}\nRegistra ahora las bazas ganadas.`);
+            }
+
+            mostrarMensajeApuestasInfo(diferencia, sumaApuestas, cartasPorRonda) {
+                this.mensajeApuestasInfo.classList.remove('hidden');
+                
+                let mensaje = '';
+                let claseDiferencia = '';
+                
+                if (diferencia > 0) {
+                    mensaje = `${diferencia} de más`;
+                    claseDiferencia = 'mas';
+                } else if (diferencia < 0) {
+                    mensaje = `${Math.abs(diferencia)} de menos`;
+                    claseDiferencia = 'menos';
+                } else {
+                    mensaje = `¡Exacto!`;
+                    claseDiferencia = 'exacto';
+                }
+                
+                this.mensajeApuestasInfo.innerHTML = `
+                    <div class="titulo">
+                        <i class="fas fa-info-circle"></i> Ronda ${this.rondaActual}
+                    </div>
+                    <div style="font-size: 0.75rem;">
+                        <strong>Suma:</strong> ${sumaApuestas} | <strong>No puede ser:</strong> ${cartasPorRonda}
+                    </div>
+                    <div class="diferencia ${claseDiferencia}" style="font-size: 0.9rem; padding: 4px;">
+                        ${mensaje}
+                    </div>
+                `;
+            }
+
+            actualizarPuntuacionParcial() {
+                // Ordenar jugadores por puntos (de mayor a menor)
+                const jugadoresOrdenados = [...this.jugadoresData].sort((a, b) => b.puntos - a.puntos);
+                
+                let html = `
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Jugador</th>
+                            <th>Pts</th>
+                            <th>A</th>
+                            <th>B</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+                
+                jugadoresOrdenados.forEach((jugador, index) => {
+                    const posicion = index + 1;
+                    const esPrimero = posicion === 1;
+                    
+                    html += `
+                        <tr ${esPrimero ? 'style="background-color: rgba(255, 215, 0, 0.1);"' : ''}>
+                            <td>${posicion}º</td>
+                            <td style="text-align: left; padding-left: 4px;" title="${jugador.nombre}">${jugador.nombre.substring(0, 8)}${jugador.nombre.length > 8 ? '...' : ''}</td>
+                            <td style="font-weight: bold;">${jugador.puntos}</td>
+                            <td>${jugador.apuestaActual !== null ? jugador.apuestaActual : '-'}</td>
+                            <td>${jugador.bazasActual}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `</tbody>`;
+                
+                this.tablaPuntuacionParcial.innerHTML = html;
+            }
+
+            actualizarTarjetasJugadores() {
+                document.querySelectorAll('.jugador-card').forEach(card => {
+                    card.classList.remove('en-turno');
+                });
+                
+                if (this.modoTurno && this.apuestasRonda.length < this.jugadores) {
+                    const jugadorIndex = (this.iniciadorRondaActual + this.apuestasRonda.length) % this.jugadores;
+                    const jugadorActual = this.jugadoresData[jugadorIndex];
+                    const card = document.querySelector(`.jugador-card[data-id="${jugadorActual.id}"]`);
+                    if (card) {
+                        card.classList.add('en-turno');
+                    }
+                }
+            }
+
+            calcularCartasPorRonda() {
+                if (this.rondaActual <= 5) {
+                    // Ascendente: 1-5 cartas
+                    return this.rondaActual;
+                } else if (this.rondaActual <= 17) {
+                    // 12 rondas de 6 cartas
+                    return 6;
+                } else if (this.rondaActual <= 22) {
+                    // Descendente: 5-1 cartas (rondas 18-22)
+                    return 28 - this.rondaActual; // 28-18=10, 28-19=9... ¡ESTO ESTÁ MAL!
+                    // CORRECCIÓN: Debería ser: 23-18=5, 23-19=4, etc.
+                    return 23 - this.rondaActual; // Para ronda 18: 23-18=5, ronda 19: 23-19=4, etc.
+                } else {
+                    // Finales: 2 rondas de 1 carta
+                    return 1;
+                }
+            }
+
+            getFaseActual() {
+                if (this.rondaActual <= 5) return 'Ascendente';
+                if (this.rondaActual <= 17) return 'Plena';
+                if (this.rondaActual <= 22) return 'Descendente';
+                return 'Final';
+            }
+
+            getFaseAbreviada() {
+                if (this.rondaActual <= 5) return 'Asc.';
+                if (this.rondaActual <= 17) return 'Plena';
+                if (this.rondaActual <= 22) return 'Desc.';
+                return 'Final';
+            }
+
+            actualizarInfoRonda() {
+                const fase = this.getFaseAbreviada();
+                const cartas = this.calcularCartasPorRonda();
+                
+                // Actualizar elementos del marcador
+                this.currentRondaElement.textContent = this.rondaActual;
+                this.currentTotalElement.textContent = this.totalRondas;
+                this.currentFaseElement.textContent = fase;
+                this.currentCartasElement.textContent = cartas;
+                
+                // Actualizar elementos del turno
+                this.turnoRondaElement.textContent = this.rondaActual;
+                this.turnoTotalElement.textContent = this.totalRondas;
+                this.turnoCartasElement.textContent = cartas;
+                this.turnoFaseElement.textContent = fase;
+            }
+
+            verResultadosParciales() {
+                // Calcular puntos parciales
+                const resultados = this.calcularPuntosParciales();
+                
+                let mensaje = `Clasificación - Ronda ${this.rondaActual}\n\n`;
+                resultados.forEach((r, i) => {
+                    mensaje += `${i+1}º: ${r.nombre} - ${r.puntos} pts\n`;
+                    if (r.apuestaActual !== null) {
+                        mensaje += `   A:${r.apuestaActual} B:${r.bazasActual}\n`;
+                    }
+                });
+                
+                alert(mensaje);
+            }
+
+            calcularPuntosParciales() {
+                return this.jugadoresData.map(jugador => ({
+                    nombre: jugador.nombre,
+                    puntos: jugador.puntos,
+                    apuestaActual: jugador.apuestaActual,
+                    bazasActual: jugador.bazasActual
+                })).sort((a, b) => b.puntos - a.puntos);
+            }
+
+            siguienteRonda() {
+                if (confirm('¿Pasar a siguiente ronda? Se calcularán los puntos.')) {
+                    this.calcularRonda();
+                    
+                    if (this.rondaActual < this.totalRondas) {
+                        this.rondaActual++;
+                        
+                        // Reiniciar contadores para nueva ronda
+                        this.jugadoresData.forEach(jugador => {
+                            jugador.apuestaActual = null;
+                            jugador.bazasActual = 0;
+                        });
+                        
+                        // Ocultar mensaje informativo
+                        this.mensajeApuestasInfo.classList.add('hidden');
+                        
+                        // Actualizar UI
+                        this.actualizarInfoRonda();
+                        this.resetearContadoresUI();
+                        this.actualizarPuntuacionParcial();
+                        
+                        // Iniciar turnos para nueva ronda
+                        this.iniciarTurnos();
+                    } else {
+                        this.finalizarPartida();
+                    }
+                }
+            }
+
+            calcularRonda() {
+                // Calcular puntos para cada jugador
+                this.jugadoresData.forEach(jugador => {
+                    if (jugador.apuestaActual === null) {
+                        alert(`Error: ${jugador.nombre} no tiene apuesta.`);
+                        return;
+                    }
+                    
+                    const diferencia = Math.abs(jugador.apuestaActual - jugador.bazasActual);
+                    let puntosRonda = 0;
+                    
+                    if (diferencia === 0) {
+                        // Acertó exacto
+                        puntosRonda = this.puntuaciones[jugador.apuestaActual] || 0;
+                    } else {
+                        // No acertó
+                        puntosRonda = - (diferencia * this.penalizacionPorFallar);
+                    }
+                    
+                    jugador.puntos += puntosRonda;
+                    
+                    // Guardar historial
+                    jugador.historial.push({
+                        ronda: this.rondaActual,
+                        apuesta: jugador.apuestaActual,
+                        bazas: jugador.bazasActual,
+                        puntos: puntosRonda,
+                        puntosTotales: jugador.puntos
+                    });
+                });
+                
+                // Actualizar puntos en la UI
+                this.actualizarPuntosJugadores();
+                
+                // Actualizar puntuación parcial
+                this.actualizarPuntuacionParcial();
+                
+                // Mostrar resumen rápido
+                setTimeout(() => {
+                    alert(`Ronda ${this.rondaActual} calculada. Puntos actualizados.`);
+                }, 300);
+            }
+
+            actualizarPuntosJugadores() {
+                this.jugadoresData.forEach(jugador => {
+                    const puntosElement = document.querySelector(`.jugador-card[data-id="${jugador.id}"] .jugador-puntos`);
+                    if (puntosElement) {
+                        puntosElement.textContent = jugador.puntos;
+                        puntosElement.style.transform = 'scale(1.2)';
+                        setTimeout(() => {
+                            puntosElement.style.transform = 'scale(1)';
+                        }, 200);
+                    }
+                });
+            }
+
+            resetearContadoresUI() {
+                // Resetear apuestas
+                this.jugadoresData.forEach(jugador => {
+                    const apuestaElement = document.getElementById(`apuesta-j${jugador.id}`);
+                    if (apuestaElement) {
+                        apuestaElement.textContent = '-';
+                        apuestaElement.style.color = '';
+                        apuestaElement.style.fontWeight = '';
+                    }
+                });
+                
+                // Resetear bazas
+                document.querySelectorAll('.bazas-count').forEach(span => {
+                    span.textContent = '0';
+                });
+            }
+
+            finalizarPartida() {
+                if (confirm('¿Finalizar partida?')) {
+                    // Calcular última ronda si no se ha calculado
+                    if (this.jugadoresData[0].apuestaActual !== null) {
+                        this.calcularRonda();
+                    }
+                    
+                    this.partidaActiva = false;
+                    this.mostrarResultadosFinales();
+                    this.mostrarSeccion('resultados');
+                }
+            }
+
+            mostrarResultadosFinales() {
+                // Ordenar jugadores por puntos
+                const jugadoresOrdenados = [...this.jugadoresData].sort((a, b) => b.puntos - a.puntos);
+                
+                let html = `
+                    <table style="width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9rem;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, var(--verde-principal), var(--verde-oscuro)); color: var(--blanco);">
+                                <th style="padding: 8px; text-align: left;">Pos</th>
+                                <th style="padding: 8px; text-align: left;">Jugador</th>
+                                <th style="padding: 8px; text-align: left;">Puntos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                jugadoresOrdenados.forEach((jugador, index) => {
+                    const posicion = index + 1;
+                    const esGanador = posicion === 1;
+                    
+                    html += `
+                        <tr style="${esGanador ? 'background: linear-gradient(135deg, var(--amarillo), #ffd700); font-weight: bold;' : ''}">
+                            <td style="padding: 8px; border-bottom: 1px solid var(--gris-medio);">${posicion}º</td>
+                            <td style="padding: 8px; border-bottom: 1px solid var(--gris-medio);">${jugador.nombre}</td>
+                            <td style="padding: 8px; border-bottom: 1px solid var(--gris-medio); font-weight: bold;">${jugador.puntos}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                        </tbody>
+                    </table>
+                `;
+                
+                document.getElementById('tabla-resultados').innerHTML = html;
+            }
+
+            nuevaPartida() {
+                if (confirm('¿Nueva partida? Se perderán los datos.')) {
+                    // Reiniciar todo
+                    this.jugadores = 6;
+                    this.jugadoresData = [];
+                    this.rondas = [];
+                    this.rondaActual = 1;
+                    this.turnoActual = 0;
+                    this.iniciadorRondaActual = 0;
+                    this.apuestasRonda = [];
+                    this.historialApuestas = [];
+                    this.partidaActiva = false;
+                    this.modoTurno = false;
+                    
+                    // Actualizar botones del menú
+                    this.btnJugadores.forEach(btn => {
+                        btn.classList.remove('active');
+                        if (parseInt(btn.dataset.jugadores) === 6) {
+                            btn.classList.add('active');
+                        }
+                    });
+                    
+                    // Volver al menú principal
+                    this.mostrarSeccion('menu');
+                    this.actualizarInfoPartida();
+                }
+            }
+
+            mostrarSeccion(seccion) {
+                // Ocultar todas las secciones
+                document.querySelectorAll('.section').forEach(s => {
+                    s.classList.remove('active');
+                });
+                
+                // Mostrar sección solicitada
+                if (seccion === 'menu') {
+                    this.menuSection.classList.add('active');
+                } else if (seccion === 'config') {
+                    this.configSection.classList.add('active');
+                } else if (seccion === 'turno') {
+                    this.turnoSection.classList.add('active');
+                } else if (seccion === 'marcador') {
+                    this.marcadorSection.classList.add('active');
+                } else if (seccion === 'resultados') {
+                    this.resultadosSection.classList.add('active');
+                }
+            }
+        }
+
+        // Inicializar la aplicación cuando se cargue la página
+        document.addEventListener('DOMContentLoaded', () => {
+            window.galiPocha = new GaliPochaApp();
+            
+            // Efecto de carga suave
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.3s';
+                document.body.style.opacity = '1';
+            }, 100);
+            
+            // Prevenir zoom en dispositivos móviles
+            document.addEventListener('touchstart', (e) => {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', (e) => {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    e.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+            
+            // Mensaje de bienvenida
+            setTimeout(() => {
+                console.log('📱 GaliPocha by Ferteam - Versión móvil optimizada');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
