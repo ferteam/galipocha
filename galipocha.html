@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GaliPocha by Ferteam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset y estilos base ultra compactos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --verde-principal: #1a5d1a;
+            --verde-claro: #d4edda;
+            --verde-medio: #28a745;
+            --verde-oscuro: #0d3b0d;
+            --blanco: #FFFFFF;
+            --gris-claro: #f8f9fa;
+            --gris-medio: #e9ecef;
+            --gris-oscuro: #495057;
+            --rojo: #dc3545;
+            --azul: #007bff;
+            --amarillo: #ffc107;
+            --dorado: #ffd700;
+            --naranja: #fd7e14;
+            --sombra: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --borde-radius: 6px;
+            --transicion: all 0.2s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #1a5d1a 0%, #28a745 100%);
+            color: #333;
+            line-height: 1.3;
+            min-height: 100vh;
+            padding: 8px;
+            font-size: 13px;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: var(--blanco);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            min-height: calc(100vh - 16px);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--dorado);
+        }
+
+        /* Header compacto */
+        .app-header {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-principal));
+            color: var(--blanco);
+            padding: 10px;
+            text-align: center;
+            border-bottom: 2px solid var(--dorado);
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--dorado);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo .by {
+            font-size: 0.7rem;
+            color: var(--blanco);
+            font-weight: normal;
+            margin-left: 2px;
+        }
+
+        .logo .ferteam {
+            color: var(--amarillo);
+            font-weight: bold;
+        }
+
+        /* Secciones compactas */
+        .section {
+            display: none;
+            flex: 1;
+            padding: 12px;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .section.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(3px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Menú principal ultra compacto */
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex: 1;
+            padding: 12px 8px;
+            gap: 12px;
+        }
+
+        .info-ronda-menu {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .info-card-menu {
+            background: var(--gris-claro);
+            padding: 10px;
+            border-radius: var(--borde-radius);
+            border: 1px solid var(--gris-medio);
+            text-align: center;
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-card-menu .label {
+            font-size: 0.65rem;
+            color: var(--gris-oscuro);
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
+        .info-card-menu .value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--verde-principal);
+        }
+
+        /* Selección de jugadores compacta */
+        .jugadores-seleccion {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+
+        .btn-jugador {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--gris-medio);
+            border-radius: 50%;
+            background: var(--blanco);
+            color: var(--gris-oscuro);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transicion);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-jugador.active {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            border-color: var(--verde-principal);
+            transform: scale(1.05);
+        }
+
+        /* Botones principales compactos */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            border: none;
+            padding: 10px 14px;
+            border-radius: var(--borde-radius);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transicion);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            min-height: 40px;
+        }
+
+        /* Configuración de nombres compacta */
+        .inputs-nombres {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 12px 0;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .input-nombre {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--gris-medio);
+            border-radius: var(--borde-radius);
+            font-size: 0.85rem;
+        }
+
+        /* Pantalla de turno ultra compacta */
+        .turno-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .jugador-turno-container {
+            background: linear-gradient(135deg, var(--verde-claro), var(--blanco));
+            border-radius: var(--borde-radius);
+            padding: 12px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--verde-medio);
+            min-height: 70px;
+        }
+
+        .jugador-turno {
+            font-size: 1.2rem;
+            color: var(--verde-oscuro);
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        /* Clasificación provisional en turno */
+        .clasificacion-turno {
+            width: 100%;
+            max-width: 350px;
+            max-height: 120px;
+            overflow-y: auto;
+            background: var(--gris-claro);
+            border-radius: var(--borde-radius);
+            padding: 8px;
+            font-size: 0.75rem;
+        }
+
+        .tabla-clasificacion {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabla-clasificacion th {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            padding: 4px;
+            font-size: 0.7rem;
+            position: sticky;
+            top: 0;
+        }
+
+        .tabla-clasificacion td {
+            padding: 4px;
+            border-bottom: 1px solid var(--gris-medio);
+            text-align: center;
+        }
+
+        /* Botones de apuesta ultra compactos */
+        .apuestas-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            width: 100%;
+            max-width: 320px;
+            margin: 8px 0;
+        }
+
+        .btn-apuesta {
+            padding: 10px 2px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: 1px solid var(--gris-medio);
+            border-radius: 6px;
+            background: var(--blanco);
+            color: var(--gris-oscuro);
+            cursor: pointer;
+            transition: var(--transicion);
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-apuesta.active {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            border-color: var(--verde-principal);
+        }
+
+        .btn-apuesta.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: var(--gris-claro);
+        }
+
+        /* Mesa de juego ultra compacta - SIN SCROLL */
+        .mesa-container {
+            display: grid;
+            gap: 6px;
+            margin: 8px 0;
+            flex: 1;
+            min-height: 280px;
+            max-height: 280px;
+            overflow: hidden;
+        }
+
+        .mesa-4 { grid-template-columns: repeat(2, 1fr); }
+        .mesa-5 { grid-template-columns: repeat(3, 1fr); }
+        .mesa-6 { grid-template-columns: repeat(3, 1fr); }
+
+        .jugador-card {
+            background: var(--blanco);
+            border-radius: var(--borde-radius);
+            padding: 8px;
+            box-shadow: var(--sombra);
+            border: 1px solid transparent;
+            position: relative;
+            min-height: 90px;
+            max-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .jugador-card.en-turno {
+            border-color: var(--verde-medio);
+            background: linear-gradient(135deg, var(--blanco), var(--verde-claro));
+        }
+
+        .jugador-nombre {
+            font-weight: 600;
+            color: var(--verde-oscuro);
+            font-size: 0.75rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        .jugador-puntos {
+            background: linear-gradient(135deg, var(--verde-medio), var(--verde-principal));
+            color: var(--blanco);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            min-width: 30px;
+            text-align: center;
+            align-self: flex-end;
+        }
+
+        /* Navegación de rondas compacta */
+        .navegacion-rondas {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px 0;
+            padding: 8px;
+            background: var(--gris-claro);
+            border-radius: var(--borde-radius);
+        }
+
+        .btn-navegacion {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            background: var(--verde-medio);
+            color: var(--blanco);
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-ronda-actual {
+            text-align: center;
+            min-width: 130px;
+        }
+
+        /* Control de bazas compacto */
+        .contador-bazas {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+            font-size: 0.7rem;
+        }
+
+        .btn-baza {
+            width: 25px;
+            height: 25px;
+            border: none;
+            border-radius: 50%;
+            background: var(--verde-medio);
+            color: var(--blanco);
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Selector de triunfo */
+        .triunfo-selector {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--blanco);
+            border-radius: var(--borde-radius);
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            width: 90%;
+            max-width: 300px;
+            border: 2px solid var(--dorado);
+        }
+
+        .triunfo-selector.active {
+            display: block;
+        }
+
+        .triunfo-opciones {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .btn-triunfo {
+            padding: 12px 8px;
+            border: none;
+            border-radius: var(--borde-radius);
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transicion);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-oro {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #8a6d3b;
+        }
+
+        .btn-copa {
+            background: linear-gradient(135deg, #dc3545, #e57373);
+            color: var(--blanco);
+        }
+
+        .btn-espada {
+            background: linear-gradient(135deg, #6c757d, #a0a0a0);
+            color: var(--blanco);
+        }
+
+        .btn-basto {
+            background: linear-gradient(135deg, #28a745, #5cb85c);
+            color: var(--blanco);
+        }
+
+        .triunfo-actual {
+            background: linear-gradient(135deg, var(--amarillo), var(--naranja));
+            color: var(--verde-oscuro);
+            padding: 6px 10px;
+            border-radius: var(--borde-radius);
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+
+        /* Overlay para selector de triunfo */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Responsive para iPhone 15 Pro Max */
+        @media (max-width: 430px) and (max-height: 932px) {
+            body {
+                padding: 6px;
+                font-size: 12px;
+            }
+            
+            .app-container {
+                min-height: calc(100vh - 12px);
+                border-radius: 8px;
+            }
+            
+            .section {
+                padding: 10px;
+            }
+            
+            .menu-container {
+                padding: 10px 6px;
+                gap: 10px;
+            }
+            
+            .info-card-menu {
+                padding: 8px;
+                min-height: 45px;
+            }
+            
+            .btn-jugador {
+                width: 38px;
+                height: 38px;
+                font-size: 0.95rem;
+            }
+            
+            .btn-primary {
+                padding: 9px 12px;
+                font-size: 0.8rem;
+                min-height: 38px;
+            }
+            
+            .inputs-nombres {
+                gap: 6px;
+                max-width: 320px;
+            }
+            
+            .input-nombre {
+                padding: 7px;
+                font-size: 0.8rem;
+            }
+            
+            .clasificacion-turno {
+                max-height: 110px;
+                font-size: 0.7rem;
+            }
+            
+            .apuestas-container {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 300px;
+                gap: 4px;
+            }
+            
+            .btn-apuesta {
+                padding: 8px 1px;
+                font-size: 0.95rem;
+                min-height: 42px;
+            }
+            
+            .mesa-container {
+                min-height: 270px;
+                max-height: 270px;
+                gap: 5px;
+            }
+            
+            .jugador-card {
+                min-height: 85px;
+                max-height: 85px;
+                padding: 6px;
+            }
+            
+            .jugador-nombre {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Para 6 jugadores específicamente */
+        .mesa-6 .jugador-card {
+            min-height: 82px;
+            max-height: 82px;
+        }
+
+        /* Utilidades */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-8 {
+            margin-top: 8px;
+        }
+
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header compacto -->
+        <header class="app-header">
+            <div class="logo">
+                GaliPocha<span class="by">by</span><span class="ferteam">Ferteam</span>
+            </div>
+            <div style="font-size: 0.7rem; opacity: 0.9;">Marcador móvil</div>
+        </header>
+
+        <!-- Menú Principal -->
+        <section id="menu-section" class="section active">
+            <div class="menu-container">
+                <div class="info-ronda-menu">
+                    <div class="info-card-menu">
+                        <div class="label">Jugadores</div>
+                        <div class="value" id="menu-jugadores">6</div>
+                    </div>
+                    <div class="info-card-menu">
+                        <div class="label">Rondas</div>
+                        <div class="value" id="menu-rondas">24</div>
+                    </div>
+                </div>
+
+                <div style="color: var(--verde-principal); text-align: center; font-size: 0.9rem;">
+                    <i class="fas fa-users"></i> Nº de jugadores
+                </div>
+
+                <div class="jugadores-seleccion">
+                    <button class="btn-jugador" data-jugadores="4">4</button>
+                    <button class="btn-jugador" data-jugadores="5">5</button>
+                    <button class="btn-jugador active" data-jugadores="6">6</button>
+                </div>
+
+                <div style="width: 100%; max-width: 350px; margin: 10px 0; padding: 10px; background: var(--gris-claro); border-radius: var(--borde-radius); font-size: 0.75rem;">
+                    <div style="color: var(--verde-oscuro); font-weight: bold; margin-bottom: 6px; text-align: center;">
+                        <i class="fas fa-info-circle"></i> Estructura para <span id="info-jugadores">6</span> jugadores
+                    </div>
+                    <div id="estructura-info">
+                        <!-- Información dinámica según jugadores -->
+                    </div>
+                </div>
+
+                <button id="btn-continuar-config" class="btn-primary" style="max-width: 300px;">
+                    <i class="fas fa-arrow-right"></i> Configurar
+                </button>
+            </div>
+        </section>
+
+        <!-- Configuración de Nombres -->
+        <section id="config-section" class="section">
+            <div class="turno-screen">
+                <div style="color: var(--verde-oscuro); margin-bottom: 12px; text-align: center; font-size: 1rem;">
+                    <i class="fas fa-cog"></i> Nombres
+                </div>
+                
+                <div class="inputs-nombres" id="inputs-nombres">
+                    <!-- Inputs generados dinámicamente -->
+                </div>
+
+                <div style="width: 100%; max-width: 300px; padding: 10px; background: var(--gris-claro); border-radius: var(--borde-radius); font-size: 0.75rem;">
+                    <div><strong>Jugadores:</strong> <span id="config-jugadores">6</span></div>
+                    <div><strong>Rondas totales:</strong> <span id="config-rondas">24</span></div>
+                    <div><strong>Cartas máx/ronda:</strong> <span id="config-cartas-max">6</span></div>
+                </div>
+
+                <div style="display: flex; gap: 8px; width: 100%; max-width: 300px; margin-top: 15px;">
+                    <button id="btn-volver-menu" class="btn-primary" style="background: linear-gradient(135deg, #6c757d, #495057); flex: 1;">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button id="btn-iniciar-partida" class="btn-primary" style="flex: 1;">
+                        <i class="fas fa-play"></i> Jugar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pantalla de Turno -->
+        <section id="turno-section" class="section">
+            <div class="turno-screen">
+                <div class="info-ronda-menu">
+                    <div class="info-card-menu">
+                        <div class="label">Ronda</div>
+                        <div class="value" id="turno-ronda">1</div>
+                    </div>
+                    <div class="info-card-menu">
+                        <div class="label">Cartas</div>
+                        <div class="value" id="turno-cartas">1</div>
+                    </div>
+                </div>
+
+                <!-- Selector de triunfo (solo visible en rondas con triunfo) -->
+                <div id="triunfo-actual-container" class="triunfo-actual hidden" style="width: 100%; max-width: 350px;">
+                    <i class="fas fa-crown"></i>
+                    <span id="triunfo-actual-text">Sin triunfo</span>
+                    <i class="fas fa-edit" style="margin-left: auto;"></i>
+                </div>
+
+                <div class="jugador-turno-container">
+                    <div class="jugador-turno" id="jugador-turno">
+                        Jugador 1
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--gris-oscuro);" id="pregunta-turno">
+                        ¿Cuántas bazas?
+                    </div>
+                </div>
+
+                <!-- Clasificación provisional durante el turno -->
+                <div class="clasificacion-turno" id="clasificacion-turno">
+                    <table class="tabla-clasificacion">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Jugador</th>
+                                <th>Pts</th>
+                                <th>A</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-clasificacion-body">
+                            <!-- Datos generados dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="width: 100%; max-width: 300px; padding: 8px; background: var(--gris-claro); border-radius: var(--borde-radius); font-size: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>Apuestas: <span id="apuestas-realizadas">0</span>/<span id="total-jugadores">6</span></div>
+                        <div>Suma: <span id="suma-apuestas">0</span></div>
+                    </div>
+                    <div style="color: var(--rojo); margin-top: 4px; display: none; font-size: 0.7rem;" id="restriccion-mensaje">
+                        <!-- Mensaje de restricción -->
+                    </div>
+                </div>
+
+                <div class="apuestas-container" id="apuestas-container">
+                    <!-- Botones de apuesta generados dinámicamente -->
+                </div>
+
+                <div style="display: flex; gap: 6px; width: 100%; max-width: 300px;">
+                    <button id="btn-deshacer" class="btn-primary" style="background: linear-gradient(135deg, #6c757d, #495057); flex: 1; padding: 8px;">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button id="btn-confirmar-apuesta" class="btn-primary" disabled style="flex: 2; padding: 8px;">
+                        <i class="fas fa-check"></i> OK
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marcador Principal -->
+        <section id="marcador-section" class="section">
+            <div class="navegacion-rondas">
+                <button id="btn-ronda-anterior" class="btn-navegacion">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="info-ronda-actual">
+                    <div style="font-size: 0.9rem; font-weight: bold; color: var(--verde-principal);">
+                        R <span id="current-ronda">1</span>/<span id="total-rondas">24</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--gris-oscuro);">
+                        <span id="current-fase">Asc.</span> - <span id="current-cartas">1</span>
+                    </div>
+                </div>
+                
+                <button id="btn-ronda-siguiente" class="btn-navegacion">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Selector de triunfo en marcador -->
+            <div id="triunfo-marcador-container" class="triunfo-actual hidden" style="margin: 0 auto 10px; max-width: 300px;">
+                <i class="fas fa-crown"></i>
+                <span id="triunfo-marcador-text">Sin triunfo</span>
+                <i class="fas fa-edit" style="margin-left: auto;"></i>
+            </div>
+
+            <div class="mesa-container" id="mesa-container">
+                <!-- Jugadores generados dinámicamente -->
+            </div>
+
+            <div style="padding: 12px; background: var(--gris-claro); border-radius: var(--borde-radius); margin-top: 8px;">
+                <div id="mensaje-bazas" style="font-size: 0.75rem; color: var(--rojo); margin-bottom: 8px; display: none;">
+                    <i class="fas fa-exclamation-triangle"></i> Suma bazas = <span id="cartas-ronda-bazas">1</span>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <button id="btn-calc-ronda" class="btn-primary" style="padding: 8px; font-size: 0.8rem;">
+                        <i class="fas fa-calculator"></i> Calcular
+                    </button>
+                    <button id="btn-siguiente-ronda" class="btn-primary" style="background: linear-gradient(135deg, var(--azul), #0056b3); padding: 8px; font-size: 0.8rem;">
+                        <i class="fas fa-forward"></i> Siguiente
+                    </button>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button id="btn-finalizar-partida" class="btn-primary" style="background: linear-gradient(135deg, var(--rojo), #c82333); max-width: 180px; padding: 8px; font-size: 0.8rem;">
+                        <i class="fas fa-flag"></i> Finalizar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resultados Finales -->
+        <section id="resultados-section" class="section">
+            <div class="menu-container">
+                <div style="color: var(--verde-oscuro); margin-bottom: 12px; text-align: center; font-size: 1.1rem;">
+                    <i class="fas fa-trophy"></i> Resultados
+                </div>
+                
+                <div id="tabla-resultados" style="width: 100%; max-width: 350px;">
+                    <!-- Resultados generados dinámicamente -->
+                </div>
+                
+                <div style="display: flex; gap: 8px; width: 100%; max-width: 300px; margin-top: 15px;">
+                    <button id="btn-nueva-partida" class="btn-primary" style="flex: 1; padding: 8px;">
+                        <i class="fas fa-plus"></i> Nueva
+                    </button>
+                    <button id="btn-volver-marcador" class="btn-primary" style="background: linear-gradient(135deg, #6c757d, #495057); flex: 1; padding: 8px;">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Selector de Triunfo (Modal) -->
+    <div class="overlay" id="overlay-triunfo"></div>
+    <div class="triunfo-selector" id="triunfo-selector">
+        <div style="color: var(--verde-oscuro); text-align: center; margin-bottom: 10px; font-size: 1rem;">
+            <i class="fas fa-crown"></i> Seleccionar Triunfo
+        </div>
+        <div style="font-size: 0.8rem; text-align: center; margin-bottom: 15px; color: var(--gris-oscuro);">
+            Ronda <span id="triunfo-ronda-numero">1</span> - <span id="triunfo-fase-actual">Ascendente</span>
+        </div>
+        <div class="triunfo-opciones">
+            <button class="btn-triunfo btn-oro" data-triunfo="Oros">
+                <i class="fas fa-gem"></i> Oros
+            </button>
+            <button class="btn-triunfo btn-copa" data-triunfo="Copas">
+                <i class="fas fa-wine-glass"></i> Copas
+            </button>
+            <button class="btn-triunfo btn-espada" data-triunfo="Espadas">
+                <i class="fas fa-crosshairs"></i> Espadas
+            </button>
+            <button class="btn-triunfo btn-basto" data-triunfo="Bastos">
+                <i class="fas fa-tree"></i> Bastos
+            </button>
+        </div>
+        <div style="margin-top: 15px; display: flex; gap: 10px;">
+            <button id="btn-triunfo-sin" class="btn-primary" style="background: linear-gradient(135deg, #6c757d, #495057); flex: 1; padding: 8px; font-size: 0.8rem;">
+                <i class="fas fa-times"></i> Sin triunfo
+            </button>
+            <button id="btn-cerrar-triunfo" class="btn-primary" style="flex: 1; padding: 8px; font-size: 0.8rem;">
+                <i class="fas fa-times"></i> Cerrar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        class GaliPochaGame {
+            constructor() {
+                this.jugadores = 6;
+                this.nombresJugadores = [];
+                this.jugadoresData = [];
+                this.rondas = [];
+                this.rondaActual = 1;
+                this.turnoActual = 0;
+                this.apuestasRonda = [];
+                this.partidaActiva = false;
+                this.modoTurno = false;
+                this.iniciadorRonda = 0;
+                this.rondasCalculadas = new Set();
+                this.maxCartasPorRonda = 6;
+                this.totalRondas = 24;
+                this.triunfoActual = null;
+                this.triunfoMostrado = false; // Para controlar el aviso de inicio de triunfos
+                
+                this.init();
+            }
+
+            init() {
+                this.cacheDOM();
+                this.bindEvents();
+                this.actualizarEstructuraInfo();
+                this.actualizarConfigInfo();
+            }
+
+            cacheDOM() {
+                // Secciones
+                this.menuSection = document.getElementById('menu-section');
+                this.configSection = document.getElementById('config-section');
+                this.turnoSection = document.getElementById('turno-section');
+                this.marcadorSection = document.getElementById('marcador-section');
+                this.resultadosSection = document.getElementById('resultados-section');
+                
+                // Menú
+                this.btnJugadores = document.querySelectorAll('.btn-jugador');
+                this.btnContinuarConfig = document.getElementById('btn-continuar-config');
+                this.menuJugadores = document.getElementById('menu-jugadores');
+                this.menuRondas = document.getElementById('menu-rondas');
+                this.estructuraInfo = document.getElementById('estructura-info');
+                this.infoJugadores = document.getElementById('info-jugadores');
+                
+                // Configuración
+                this.inputsNombres = document.getElementById('inputs-nombres');
+                this.btnVolverMenu = document.getElementById('btn-volver-menu');
+                this.btnIniciarPartida = document.getElementById('btn-iniciar-partida');
+                this.configJugadores = document.getElementById('config-jugadores');
+                this.configRondas = document.getElementById('config-rondas');
+                this.configCartasMax = document.getElementById('config-cartas-max');
+                
+                // Turno
+                this.jugadorTurnoElement = document.getElementById('jugador-turno');
+                this.preguntaTurnoElement = document.getElementById('pregunta-turno');
+                this.apuestasContainer = document.getElementById('apuestas-container');
+                this.apuestasRealizadasElement = document.getElementById('apuestas-realizadas');
+                this.sumaApuestasElement = document.getElementById('suma-apuestas');
+                this.totalJugadoresElement = document.getElementById('total-jugadores');
+                this.restriccionMensaje = document.getElementById('restriccion-mensaje');
+                this.btnConfirmarApuesta = document.getElementById('btn-confirmar-apuesta');
+                this.btnDeshacer = document.getElementById('btn-deshacer');
+                this.clasificacionTurno = document.getElementById('clasificacion-turno');
+                this.tablaClasificacionBody = document.getElementById('tabla-clasificacion-body');
+                
+                // Triunfo
+                this.triunfoActualContainer = document.getElementById('triunfo-actual-container');
+                this.triunfoActualText = document.getElementById('triunfo-actual-text');
+                this.triunfoMarcadorContainer = document.getElementById('triunfo-marcador-container');
+                this.triunfoMarcadorText = document.getElementById('triunfo-marcador-text');
+                this.triunfoSelector = document.getElementById('triunfo-selector');
+                this.overlayTriunfo = document.getElementById('overlay-triunfo');
+                this.btnTriunfoSin = document.getElementById('btn-triunfo-sin');
+                this.btnCerrarTriunfo = document.getElementById('btn-cerrar-triunfo');
+                this.triunfoRondaNumero = document.getElementById('triunfo-ronda-numero');
+                this.triunfoFaseActual = document.getElementById('triunfo-fase-actual');
+                this.btnTriunfoOpciones = document.querySelectorAll('.btn-triunfo');
+                
+                // Marcador
+                this.mesaContainer = document.getElementById('mesa-container');
+                this.currentRondaElement = document.getElementById('current-ronda');
+                this.totalRondasElement = document.getElementById('total-rondas');
+                this.currentFaseElement = document.getElementById('current-fase');
+                this.currentCartasElement = document.getElementById('current-cartas');
+                this.btnRondaAnterior = document.getElementById('btn-ronda-anterior');
+                this.btnRondaSiguiente = document.getElementById('btn-ronda-siguiente');
+                this.btnCalcRonda = document.getElementById('btn-calc-ronda');
+                this.btnSiguienteRonda = document.getElementById('btn-siguiente-ronda');
+                this.btnFinalizarPartida = document.getElementById('btn-finalizar-partida');
+                this.mensajeBazas = document.getElementById('mensaje-bazas');
+                this.cartasRondaBazas = document.getElementById('cartas-ronda-bazas');
+                
+                // Resultados
+                this.tablaResultados = document.getElementById('tabla-resultados');
+                this.btnNuevaPartida = document.getElementById('btn-nueva-partida');
+                this.btnVolverMarcador = document.getElementById('btn-volver-marcador');
+                
+                // Turno info
+                this.turnoRondaElement = document.getElementById('turno-ronda');
+                this.turnoCartasElement = document.getElementById('turno-cartas');
+            }
+
+            bindEvents() {
+                // Menú
+                this.btnJugadores.forEach(btn => {
+                    btn.addEventListener('click', (e) => this.seleccionarJugadores(e));
+                });
+                this.btnContinuarConfig.addEventListener('click', () => this.irAConfiguracion());
+                
+                // Configuración
+                this.btnVolverMenu.addEventListener('click', () => this.irAMenu());
+                this.btnIniciarPartida.addEventListener('click', () => this.iniciarPartida());
+                
+                // Turno
+                this.btnConfirmarApuesta.addEventListener('click', () => this.confirmarApuesta());
+                this.btnDeshacer.addEventListener('click', () => this.deshacerApuesta());
+                
+                // Triunfo
+                this.triunfoActualContainer.addEventListener('click', () => this.mostrarSelectorTriunfo());
+                this.triunfoMarcadorContainer.addEventListener('click', () => this.mostrarSelectorTriunfo());
+                this.btnTriunfoSin.addEventListener('click', () => this.seleccionarTriunfo(null));
+                this.btnCerrarTriunfo.addEventListener('click', () => this.cerrarSelectorTriunfo());
+                this.btnTriunfoOpciones.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const triunfo = e.target.dataset.triunfo;
+                        this.seleccionarTriunfo(triunfo);
+                    });
+                });
+                this.overlayTriunfo.addEventListener('click', () => this.cerrarSelectorTriunfo());
+                
+                // Marcador
+                this.btnRondaAnterior.addEventListener('click', () => this.cambiarRonda(-1));
+                this.btnRondaSiguiente.addEventListener('click', () => this.cambiarRonda(1));
+                this.btnCalcRonda.addEventListener('click', () => this.calcularRondaActual());
+                this.btnSiguienteRonda.addEventListener('click', () => this.siguienteRonda());
+                this.btnFinalizarPartida.addEventListener('click', () => this.finalizarPartida());
+                
+                // Resultados
+                this.btnNuevaPartida.addEventListener('click', () => this.nuevaPartida());
+                this.btnVolverMarcador.addEventListener('click', () => this.volverAlMarcador());
+            }
+
+            seleccionarJugadores(event) {
+                const jugadores = parseInt(event.target.dataset.jugadores);
+                this.jugadores = jugadores;
+                
+                this.btnJugadores.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (parseInt(btn.dataset.jugadores) === jugadores) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                this.menuJugadores.textContent = jugadores;
+                this.infoJugadores.textContent = jugadores;
+                this.actualizarEstructuraInfo();
+                this.actualizarConfigInfo();
+            }
+
+            actualizarEstructuraInfo() {
+                let info = '';
+                const n = this.jugadores;
+                
+                switch(n) {
+                    case 4:
+                        info = `
+                            <div><strong>Asc.:</strong> 1-9 cartas (9)</div>
+                            <div><strong>Plena sin:</strong> 4 rondas de 10</div>
+                            <div><strong>Plena con:</strong> 4 rondas de 10</div>
+                            <div><strong>Desc.:</strong> 9-1 cartas (9)</div>
+                            <div><strong>Final:</strong> Ciega + Estrella (2)</div>
+                            <div><strong>Total:</strong> 28 rondas</div>
+                            <div><strong>Triunfos desde:</strong> Ronda 14</div>
+                        `;
+                        this.maxCartasPorRonda = 10;
+                        this.totalRondas = 28;
+                        break;
+                    case 5:
+                        info = `
+                            <div><strong>Asc.:</strong> 1-8 cartas (8)</div>
+                            <div><strong>Plena sin:</strong> 5 rondas de 8</div>
+                            <div><strong>Plena con:</strong> 5 rondas de 8</div>
+                            <div><strong>Desc.:</strong> 7-1 cartas (7)</div>
+                            <div><strong>Final:</strong> Ciega + Estrella (2)</div>
+                            <div><strong>Total:</strong> 27 rondas</div>
+                            <div><strong>Triunfos desde:</strong> Ronda 13</div>
+                        `;
+                        this.maxCartasPorRonda = 8;
+                        this.totalRondas = 27;
+                        break;
+                    case 6:
+                        info = `
+                            <div><strong>Asc.:</strong> 1-6 cartas (6)</div>
+                            <div><strong>Plena sin:</strong> 6 rondas de 6</div>
+                            <div><strong>Plena con:</strong> 6 rondas de 6</div>
+                            <div><strong>Desc.:</strong> 5-1 cartas (5)</div>
+                            <div><strong>Final:</strong> Ciega + Estrella (2)</div>
+                            <div><strong>Total:</strong> 25 rondas</div>
+                            <div><strong>Triunfos desde:</strong> Ronda 12</div>
+                        `;
+                        this.maxCartasPorRonda = 6;
+                        this.totalRondas = 25;
+                        break;
+                }
+                
+                this.estructuraInfo.innerHTML = info;
+                this.menuRondas.textContent = this.totalRondas;
+            }
+
+            actualizarConfigInfo() {
+                this.configJugadores.textContent = this.jugadores;
+                this.configRondas.textContent = this.totalRondas;
+                this.configCartasMax.textContent = this.maxCartasPorRonda;
+            }
+
+            irAConfiguracion() {
+                this.generarInputsNombres();
+                this.mostrarSeccion('config');
+            }
+
+            irAMenu() {
+                this.mostrarSeccion('menu');
+            }
+
+            generarInputsNombres() {
+                this.inputsNombres.innerHTML = '';
+                for (let i = 0; i < this.jugadores; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'input-nombre';
+                    input.placeholder = `J${i+1}`;
+                    input.value = `J${i+1}`;
+                    input.maxLength = 10;
+                    this.inputsNombres.appendChild(input);
+                }
+            }
+
+            iniciarPartida() {
+                // Obtener nombres
+                this.nombresJugadores = [];
+                const inputs = document.querySelectorAll('.input-nombre');
+                inputs.forEach(input => {
+                    this.nombresJugadores.push(input.value.trim() || input.placeholder);
+                });
+                
+                // Inicializar jugadores
+                this.jugadoresData = this.nombresJugadores.map((nombre, index) => ({
+                    id: index + 1,
+                    nombre: nombre,
+                    puntos: 0,
+                    apuestaActual: null,
+                    bazasActual: 0,
+                    historialPuntos: [],
+                    orden: index + 1
+                }));
+                
+                // Crear estructura de rondas
+                this.crearEstructuraRondas();
+                
+                this.rondaActual = 1;
+                this.turnoActual = 0;
+                this.iniciadorRonda = 0;
+                this.apuestasRonda = [];
+                this.partidaActiva = true;
+                this.modoTurno = false;
+                this.rondasCalculadas.clear();
+                this.triunfoActual = null;
+                this.triunfoMostrado = false;
+                
+                // Generar mesa
+                this.generarMesa();
+                this.actualizarInfoRonda();
+                this.mostrarSeccion('marcador');
+                
+                // Iniciar primera ronda
+                this.iniciarTurnos();
+            }
+
+            crearEstructuraRondas() {
+                const n = this.jugadores;
+                this.rondas = [];
+                
+                // Ascendente
+                let cartasAsc = n === 4 ? 9 : (n === 5 ? 8 : 6);
+                for (let i = 1; i <= cartasAsc; i++) {
+                    this.rondas.push({
+                        numero: this.rondas.length + 1,
+                        cartasPorMano: i,
+                        fase: 'Ascendente',
+                        apuestas: [],
+                        bazas: [],
+                        calculada: false,
+                        triunfo: null
+                    });
+                }
+                
+                // Plena sin triunfos
+                for (let i = 1; i <= n; i++) {
+                    this.rondas.push({
+                        numero: this.rondas.length + 1,
+                        cartasPorMano: this.maxCartasPorRonda,
+                        fase: 'Plena sin triunfos',
+                        apuestas: [],
+                        bazas: [],
+                        calculada: false,
+                        triunfo: null
+                    });
+                }
+                
+                // Plena con triunfos
+                for (let i = 1; i <= n; i++) {
+                    this.rondas.push({
+                        numero: this.rondas.length + 1,
+                        cartasPorMano: this.maxCartasPorRonda,
+                        fase: 'Plena con triunfos',
+                        apuestas: [],
+                        bazas: [],
+                        calculada: false,
+                        triunfo: null
+                    });
+                }
+                
+                // Descendente
+                let cartasDesc = n === 4 ? 9 : (n === 5 ? 7 : 5);
+                for (let i = cartasDesc; i >= 1; i--) {
+                    this.rondas.push({
+                        numero: this.rondas.length + 1,
+                        cartasPorMano: i,
+                        fase: 'Descendente',
+                        apuestas: [],
+                        bazas: [],
+                        calculada: false,
+                        triunfo: null
+                    });
+                }
+                
+                // Final: Ciega y Estrella
+                this.rondas.push({
+                    numero: this.rondas.length + 1,
+                    cartasPorMano: 1,
+                    fase: 'Ciega',
+                    apuestas: [],
+                    bazas: [],
+                    calculada: false,
+                    triunfo: null
+                });
+                
+                this.rondas.push({
+                    numero: this.rondas.length + 1,
+                    cartasPorMano: 1,
+                    fase: 'Estrella',
+                    apuestas: [],
+                    bazas: [],
+                    calculada: false,
+                    triunfo: null
+                });
+                
+                this.totalRondas = this.rondas.length;
+                this.totalRondasElement.textContent = this.totalRondas;
+            }
+
+            // Función para verificar si es la primera ronda con triunfos
+            esPrimeraRondaConTriunfos() {
+                const n = this.jugadores;
+                let primeraTriunfo = 0;
+                
+                if (n === 4) primeraTriunfo = 14; // 9 ascendentes + 4 plenas sin + 1
+                if (n === 5) primeraTriunfo = 13; // 8 ascendentes + 4 plenas sin + 1
+                if (n === 6) primeraTriunfo = 12; // 6 ascendentes + 5 plenas sin + 1
+                
+                return this.rondaActual === primeraTriunfo;
+            }
+
+            // Función para verificar si estamos en ronda con triunfos
+            esRondaConTriunfos() {
+                const n = this.jugadores;
+                let inicioTriunfos = 0;
+                
+                if (n === 4) inicioTriunfos = 14;
+                if (n === 5) inicioTriunfos = 13;
+                if (n === 6) inicioTriunfos = 12;
+                
+                const ronda = this.rondas[this.rondaActual - 1];
+                return this.rondaActual >= inicioTriunfos && ronda.fase.includes('Plena con triunfos');
+            }
+
+            mostrarAvisoTriunfos() {
+                if (this.esPrimeraRondaConTriunfos() && !this.triunfoMostrado) {
+                    setTimeout(() => {
+                        alert(`¡ATENCIÓN!\n\nEmpiezan las rondas con TRIUNFOS.\n\nRecuerda seleccionar el palo triunfante tocando en el icono de corona.`);
+                        this.triunfoMostrado = true;
+                    }, 500);
+                }
+            }
+
+            generarMesa() {
+                this.mesaContainer.innerHTML = '';
+                this.mesaContainer.className = `mesa-container mesa-${this.jugadores}`;
+                
+                this.jugadoresData.forEach(jugador => {
+                    const card = document.createElement('div');
+                    card.className = 'jugador-card';
+                    card.dataset.id = jugador.id;
+                    
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <div class="jugador-nombre" title="${jugador.nombre}">${jugador.nombre}</div>
+                            <div class="jugador-puntos">${jugador.puntos}</div>
+                        </div>
+                        <div style="font-size: 0.7rem;">
+                            <div style="margin-bottom: 2px;">A: <span id="apuesta-j${jugador.id}" style="font-weight: bold;">-</span></div>
+                            <div class="contador-bazas">
+                                <span>B:</span>
+                                <button class="btn-baza" data-action="minus" data-id="${jugador.id}" style="margin-left: auto;">-</button>
+                                <span id="bazas-j${jugador.id}" style="font-weight: bold; min-width: 20px;">0</span>
+                                <button class="btn-baza" data-action="plus" data-id="${jugador.id}">+</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    this.mesaContainer.appendChild(card);
+                });
+                
+                // Asignar eventos a los botones de bazas
+                document.querySelectorAll('.btn-baza').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const jugadorId = parseInt(e.target.dataset.id);
+                        const action = e.target.dataset.action;
+                        this.actualizarBazas(jugadorId, action);
+                    });
+                });
+            }
+
+            actualizarBazas(jugadorId, action) {
+                const jugador = this.jugadoresData.find(j => j.id === jugadorId);
+                if (!jugador) return;
+                
+                const cartasPorRonda = this.rondas[this.rondaActual - 1].cartasPorMano;
+                
+                // Calcular suma actual de bazas
+                let sumaBazas = 0;
+                this.jugadoresData.forEach(j => {
+                    sumaBazas += j.bazasActual;
+                });
+                
+                if (action === 'plus') {
+                    if (jugador.bazasActual < cartasPorRonda && sumaBazas < cartasPorRonda) {
+                        jugador.bazasActual++;
+                    }
+                } else if (action === 'minus') {
+                    if (jugador.bazasActual > 0) {
+                        jugador.bazasActual--;
+                    }
+                }
+                
+                // Actualizar contador
+                document.getElementById(`bazas-j${jugadorId}`).textContent = jugador.bazasActual;
+                
+                // Verificar suma de bazas
+                sumaBazas = 0;
+                this.jugadoresData.forEach(j => {
+                    sumaBazas += j.bazasActual;
+                });
+                
+                if (sumaBazas > cartasPorRonda) {
+                    this.cartasRondaBazas.textContent = cartasPorRonda;
+                    this.mensajeBazas.style.display = 'block';
+                } else {
+                    this.mensajeBazas.style.display = 'none';
+                }
+            }
+
+            iniciarTurnos() {
+                this.modoTurno = true;
+                this.apuestasRonda = [];
+                
+                this.iniciadorRonda = (this.rondaActual - 1) % this.jugadores;
+                this.turnoActual = this.iniciadorRonda;
+                
+                // Mostrar aviso si es la primera ronda con triunfos
+                this.mostrarAvisoTriunfos();
+                
+                // Actualizar triunfo actual
+                this.actualizarTriunfoDisplay();
+                
+                this.mostrarPantallaTurno();
+            }
+
+            mostrarPantallaTurno() {
+                const jugador = this.jugadoresData[this.turnoActual];
+                const ronda = this.rondas[this.rondaActual - 1];
+                
+                // Actualizar información
+                this.turnoRondaElement.textContent = this.rondaActual;
+                this.turnoCartasElement.textContent = ronda.cartasPorMano;
+                this.jugadorTurnoElement.textContent = jugador.nombre;
+                this.preguntaTurnoElement.textContent = `R${this.rondaActual} (${ronda.fase.substring(0, 3)}) - ¿Bazas?`;
+                
+                // Actualizar contadores
+                this.apuestasRealizadasElement.textContent = this.apuestasRonda.length;
+                this.totalJugadoresElement.textContent = this.jugadores;
+                
+                // Calcular suma actual
+                const sumaActual = this.apuestasRonda.reduce((sum, a) => sum + a.apuesta, 0);
+                this.sumaApuestasElement.textContent = sumaActual;
+                
+                // Actualizar clasificación provisional
+                this.actualizarClasificacionTurno();
+                
+                // Generar botones de apuesta
+                this.generarBotonesApuesta(sumaActual, ronda.cartasPorMano);
+                
+                // Mostrar/ocultar selector de triunfo
+                if (this.esRondaConTriunfos()) {
+                    this.triunfoActualContainer.classList.remove('hidden');
+                } else {
+                    this.triunfoActualContainer.classList.add('hidden');
+                }
+                
+                // Mostrar sección de turno
+                this.mostrarSeccion('turno');
+            }
+
+            actualizarClasificacionTurno() {
+                // Ordenar jugadores por puntos
+                const jugadoresOrdenados = [...this.jugadoresData].sort((a, b) => b.puntos - a.puntos);
+                
+                let html = '';
+                jugadoresOrdenados.forEach((jugador, index) => {
+                    const posicion = index + 1;
+                    const esPrimero = posicion === 1;
+                    
+                    html += `
+                        <tr ${esPrimero ? 'style="background-color: rgba(255, 215, 0, 0.1);"' : ''}>
+                            <td>${posicion}</td>
+                            <td style="text-align: left; padding-left: 4px;" title="${jugador.nombre}">
+                                ${jugador.nombre.substring(0, 6)}${jugador.nombre.length > 6 ? '...' : ''}
+                            </td>
+                            <td style="font-weight: bold;">${jugador.puntos}</td>
+                            <td>${jugador.apuestaActual !== null ? jugador.apuestaActual : '-'}</td>
+                        </tr>
+                    `;
+                });
+                
+                this.tablaClasificacionBody.innerHTML = html;
+            }
+
+            generarBotonesApuesta(sumaActual, cartasPorRonda) {
+                this.apuestasContainer.innerHTML = '';
+                const esUltimoJugador = this.apuestasRonda.length === this.jugadores - 1;
+                let apuestaProhibida = null;
+                
+                if (esUltimoJugador) {
+                    apuestaProhibida = cartasPorRonda - sumaActual;
+                    if (apuestaProhibida >= 0 && apuestaProhibida <= cartasPorRonda) {
+                        this.restriccionMensaje.innerHTML = `No: ${apuestaProhibida} (suma = ${cartasPorRonda})`;
+                        this.restriccionMensaje.style.display = 'block';
+                    }
+                } else {
+                    this.restriccionMensaje.style.display = 'none';
+                }
+                
+                // Generar botones
+                for (let apuesta = 0; apuesta <= cartasPorRonda; apuesta++) {
+                    const button = document.createElement('button');
+                    button.className = 'btn-apuesta';
+                    button.textContent = apuesta;
+                    
+                    // Deshabilitar si es la apuesta prohibida
+                    if (esUltimoJugador && apuesta === apuestaProhibida) {
+                        button.classList.add('disabled');
+                    }
+                    
+                    button.addEventListener('click', (e) => this.seleccionarApuesta(apuesta, e.target));
+                    this.apuestasContainer.appendChild(button);
+                }
+                
+                this.btnConfirmarApuesta.disabled = true;
+            }
+
+            seleccionarApuesta(apuesta, button) {
+                if (button.classList.contains('disabled')) {
+                    const cartasPorRonda = this.rondas[this.rondaActual - 1].cartasPorMano;
+                    alert(`No puedes apostar ${apuesta} (suma sería ${cartasPorRonda})`);
+                    return;
+                }
+                
+                document.querySelectorAll('.btn-apuesta').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                button.classList.add('active');
+                this.apuestaSeleccionada = apuesta;
+                this.btnConfirmarApuesta.disabled = false;
+            }
+
+            confirmarApuesta() {
+                if (this.apuestaSeleccionada === undefined) return;
+                
+                const jugador = this.jugadoresData[this.turnoActual];
+                
+                // Guardar apuesta
+                this.apuestasRonda.push({
+                    jugadorId: jugador.id,
+                    jugadorNombre: jugador.nombre,
+                    apuesta: this.apuestaSeleccionada
+                });
+                
+                jugador.apuestaActual = this.apuestaSeleccionada;
+                
+                // Actualizar UI en mesa
+                document.getElementById(`apuesta-j${jugador.id}`).textContent = this.apuestaSeleccionada;
+                
+                // Resetear selección
+                this.apuestaSeleccionada = undefined;
+                this.btnConfirmarApuesta.disabled = true;
+                
+                // Verificar si terminaron las apuestas
+                if (this.apuestasRonda.length < this.jugadores) {
+                    // Siguiente turno
+                    this.turnoActual = (this.turnoActual + 1) % this.jugadores;
+                    this.mostrarPantallaTurno();
+                } else {
+                    // Todas las apuestas realizadas
+                    this.finalizarApuestas();
+                }
+            }
+
+            deshacerApuesta() {
+                if (this.apuestasRonda.length === 0) return;
+                
+                // Remover última apuesta
+                const ultimaApuesta = this.apuestasRonda.pop();
+                const jugador = this.jugadoresData.find(j => j.id === ultimaApuesta.jugadorId);
+                
+                if (jugador) {
+                    jugador.apuestaActual = null;
+                    document.getElementById(`apuesta-j${jugador.id}`).textContent = '-';
+                }
+                
+                // Volver al turno anterior
+                this.turnoActual = (this.turnoActual - 1 + this.jugadores) % this.jugadores;
+                this.mostrarPantallaTurno();
+            }
+
+            finalizarApuestas() {
+                const ronda = this.rondas[this.rondaActual - 1];
+                ronda.apuestas = [...this.apuestasRonda];
+                
+                const sumaTotal = this.apuestasRonda.reduce((sum, a) => sum + a.apuesta, 0);
+                const cartasPorRonda = ronda.cartasPorMano;
+                
+                // Verificar que la suma no sea igual al número de cartas
+                if (sumaTotal === cartasPorRonda) {
+                    alert(`¡Error! Suma apuestas = ${cartasPorRonda} (cartas).\nÚltimo jugador cambia apuesta.`);
+                    this.deshacerApuesta();
+                    return;
+                }
+                
+                this.modoTurno = false;
+                this.mostrarSeccion('marcador');
+                this.actualizarMesa();
+                
+                // Actualizar display de triunfo en marcador
+                this.actualizarTriunfoDisplay();
+            }
+
+            actualizarMesa() {
+                this.jugadoresData.forEach(jugador => {
+                    const card = document.querySelector(`.jugador-card[data-id="${jugador.id}"]`);
+                    if (card) {
+                        if (this.modoTurno && jugador.id === this.jugadoresData[this.turnoActual].id) {
+                            card.classList.add('en-turno');
+                        } else {
+                            card.classList.remove('en-turno');
+                        }
+                    }
+                });
+            }
+
+            // Funciones para manejo de triunfo
+            mostrarSelectorTriunfo() {
+                if (!this.esRondaConTriunfos()) {
+                    alert('Esta ronda no se juega con triunfo.');
+                    return;
+                }
+                
+                const ronda = this.rondas[this.rondaActual - 1];
+                this.triunfoRondaNumero.textContent = this.rondaActual;
+                this.triunfoFaseActual.textContent = ronda.fase;
+                
+                this.triunfoSelector.classList.add('active');
+                this.overlayTriunfo.classList.add('active');
+            }
+
+            cerrarSelectorTriunfo() {
+                this.triunfoSelector.classList.remove('active');
+                this.overlayTriunfo.classList.remove('active');
+            }
+
+            seleccionarTriunfo(triunfo) {
+                const ronda = this.rondas[this.rondaActual - 1];
+                ronda.triunfo = triunfo;
+                this.triunfoActual = triunfo;
+                
+                this.actualizarTriunfoDisplay();
+                this.cerrarSelectorTriunfo();
+                
+                if (triunfo) {
+                    setTimeout(() => {
+                        alert(`Triunfo establecido: ${triunfo}`);
+                    }, 300);
+                }
+            }
+
+            actualizarTriunfoDisplay() {
+                const ronda = this.rondas[this.rondaActual - 1];
+                const triunfo = ronda.triunfo || this.triunfoActual;
+                
+                if (triunfo) {
+                    this.triunfoActualText.textContent = triunfo;
+                    this.triunfoMarcadorText.textContent = triunfo;
+                    
+                    // Añadir color según el palo
+                    let color = '';
+                    if (triunfo === 'Oros') color = '#ffd700';
+                    else if (triunfo === 'Copas') color = '#dc3545';
+                    else if (triunfo === 'Espadas') color = '#6c757d';
+                    else if (triunfo === 'Bastos') color = '#28a745';
+                    
+                    this.triunfoActualContainer.style.background = `linear-gradient(135deg, ${color}, ${color}dd)`;
+                    this.triunfoActualContainer.style.color = triunfo === 'Oros' ? '#8a6d3b' : 'var(--blanco)';
+                    
+                    this.triunfoMarcadorContainer.style.background = `linear-gradient(135deg, ${color}, ${color}dd)`;
+                    this.triunfoMarcadorContainer.style.color = triunfo === 'Oros' ? '#8a6d3b' : 'var(--blanco)';
+                    
+                    this.triunfoActualContainer.classList.remove('hidden');
+                    this.triunfoMarcadorContainer.classList.remove('hidden');
+                } else {
+                    this.triunfoActualText.textContent = 'Sin triunfo';
+                    this.triunfoMarcadorText.textContent = 'Sin triunfo';
+                    
+                    this.triunfoActualContainer.style.background = '';
+                    this.triunfoActualContainer.style.color = '';
+                    this.triunfoMarcadorContainer.style.background = '';
+                    this.triunfoMarcadorContainer.style.color = '';
+                    
+                    if (this.esRondaConTriunfos()) {
+                        this.triunfoActualContainer.classList.remove('hidden');
+                        this.triunfoMarcadorContainer.classList.remove('hidden');
+                    } else {
+                        this.triunfoActualContainer.classList.add('hidden');
+                        this.triunfoMarcadorContainer.classList.add('hidden');
+                    }
+                }
+            }
+
+            calcularRondaActual() {
+                const ronda = this.rondas[this.rondaActual - 1];
+                const cartasPorRonda = ronda.cartasPorMano;
+                
+                // Verificar suma de bazas
+                let sumaBazas = 0;
+                this.jugadoresData.forEach(jugador => {
+                    sumaBazas += jugador.bazasActual;
+                });
+                
+                if (sumaBazas !== cartasPorRonda) {
+                    alert(`¡Error! Suma bazas (${sumaBazas}) ≠ ${cartasPorRonda} (cartas)`);
+                    return;
+                }
+                
+                // Calcular puntos
+                this.jugadoresData.forEach(jugador => {
+                    const diferencia = Math.abs(jugador.apuestaActual - jugador.bazasActual);
+                    let puntosRonda = 0;
+                    
+                    if (diferencia === 0) {
+                        puntosRonda = 10 + (jugador.apuestaActual * 5);
+                    } else {
+                        puntosRonda = -(diferencia * 5);
+                    }
+                    
+                    jugador.puntos += puntosRonda;
+                    jugador.historialPuntos.push({
+                        ronda: this.rondaActual,
+                        puntos: puntosRonda,
+                        total: jugador.puntos
+                    });
+                });
+                
+                // Marcar ronda como calculada
+                ronda.calculada = true;
+                this.rondasCalculadas.add(this.rondaActual);
+                
+                // Guardar bazas
+                ronda.bazas = this.jugadoresData.map(j => ({
+                    jugadorId: j.id,
+                    bazas: j.bazasActual
+                }));
+                
+                // Actualizar puntos
+                this.jugadoresData.forEach(jugador => {
+                    const puntosElement = document.querySelector(`.jugador-card[data-id="${jugador.id}"] .jugador-puntos`);
+                    if (puntosElement) {
+                        puntosElement.textContent = jugador.puntos;
+                    }
+                });
+                
+                alert(`Ronda ${this.rondaActual} calculada.`);
+            }
+
+            siguienteRonda() {
+                const ronda = this.rondas[this.rondaActual - 1];
+                const cartasPorRonda = ronda.cartasPorMano;
+                
+                // Verificar suma de bazas
+                let sumaBazas = 0;
+                this.jugadoresData.forEach(jugador => {
+                    sumaBazas += jugador.bazasActual;
+                });
+                
+                if (sumaBazas !== cartasPorRonda) {
+                    alert(`¡Error! Suma bazas (${sumaBazas}) ≠ ${cartasPorRonda}\nAjusta las bazas.`);
+                    return;
+                }
+                
+                // Calcular ronda si no está calculada
+                if (!ronda.calculada) {
+                    this.calcularRondaActual();
+                }
+                
+                if (this.rondaActual >= this.rondas.length) {
+                    this.finalizarPartida();
+                    return;
+                }
+                
+                // Resetear para nueva ronda
+                this.jugadoresData.forEach(jugador => {
+                    jugador.apuestaActual = null;
+                    jugador.bazasActual = 0;
+                    
+                    document.getElementById(`apuesta-j${jugador.id}`).textContent = '-';
+                    document.getElementById(`bazas-j${jugador.id}`).textContent = '0';
+                });
+                
+                this.rondaActual++;
+                this.actualizarInfoRonda();
+                this.iniciarTurnos();
+            }
+
+            cambiarRonda(direccion) {
+                const nuevaRonda = this.rondaActual + direccion;
+                
+                if (nuevaRonda < 1 || nuevaRonda > this.rondas.length) return;
+                
+                // Guardar estado actual
+                if (this.apuestasRonda.length > 0) {
+                    const ronda = this.rondas[this.rondaActual - 1];
+                    ronda.apuestas = [...this.apuestasRonda];
+                }
+                
+                // Cambiar ronda
+                this.rondaActual = nuevaRonda;
+                this.actualizarInfoRonda();
+                this.cargarDatosRonda();
+            }
+
+            cargarDatosRonda() {
+                const ronda = this.rondas[this.rondaActual - 1];
+                
+                // Cargar apuestas
+                if (ronda.apuestas && ronda.apuestas.length > 0) {
+                    this.apuestasRonda = [...ronda.apuestas];
+                    
+                    this.jugadoresData.forEach(jugador => {
+                        const apuesta = ronda.apuestas.find(a => a.jugadorId === jugador.id);
+                        jugador.apuestaActual = apuesta ? apuesta.apuesta : null;
+                        document.getElementById(`apuesta-j${jugador.id}`).textContent = 
+                            jugador.apuestaActual !== null ? jugador.apuestaActual : '-';
+                    });
+                    
+                    if (this.apuestasRonda.length < this.jugadores) {
+                        this.turnoActual = (this.iniciadorRonda + this.apuestasRonda.length) % this.jugadores;
+                        this.modoTurno = true;
+                    } else {
+                        this.modoTurno = false;
+                    }
+                } else {
+                    this.apuestasRonda = [];
+                    this.jugadoresData.forEach(jugador => {
+                        jugador.apuestaActual = null;
+                        document.getElementById(`apuesta-j${jugador.id}`).textContent = '-';
+                    });
+                    this.modoTurno = false;
+                }
+                
+                // Cargar bazas
+                if (ronda.bazas && ronda.bazas.length > 0) {
+                    ronda.bazas.forEach(bazaData => {
+                        const jugador = this.jugadoresData.find(j => j.id === bazaData.jugadorId);
+                        if (jugador) {
+                            jugador.bazasActual = bazaData.bazas;
+                            document.getElementById(`bazas-j${jugador.id}`).textContent = bazaData.bazas;
+                        }
+                    });
+                } else {
+                    this.jugadoresData.forEach(jugador => {
+                        jugador.bazasActual = 0;
+                        document.getElementById(`bazas-j${jugador.id}`).textContent = '0';
+                    });
+                }
+                
+                // Cargar triunfo
+                this.triunfoActual = ronda.triunfo || null;
+                this.actualizarTriunfoDisplay();
+                
+                this.actualizarMesa();
+                this.mensajeBazas.style.display = 'none';
+            }
+
+            actualizarInfoRonda() {
+                const ronda = this.rondas[this.rondaActual - 1];
+                
+                this.currentRondaElement.textContent = this.rondaActual;
+                this.totalRondasElement.textContent = this.totalRondas;
+                this.currentFaseElement.textContent = ronda.fase.substring(0, 4);
+                this.currentCartasElement.textContent = ronda.cartasPorMano;
+                
+                // Actualizar display de triunfo
+                this.actualizarTriunfoDisplay();
+            }
+
+            finalizarPartida() {
+                const ronda = this.rondas[this.rondaActual - 1];
+                if (!ronda.calculada) {
+                    this.calcularRondaActual();
+                }
+                
+                this.partidaActiva = false;
+                this.mostrarResultadosFinales();
+                this.mostrarSeccion('resultados');
+            }
+
+            mostrarResultadosFinales() {
+                const jugadoresOrdenados = [...this.jugadoresData].sort((a, b) => b.puntos - a.puntos);
+                
+                let html = `
+                    <div style="width: 100%;">
+                        <div style="display: flex; background: linear-gradient(135deg, var(--verde-principal), var(--verde-oscuro)); color: var(--blanco); padding: 8px; border-radius: 6px 6px 0 0; font-size: 0.8rem;">
+                            <div style="flex: 1; font-weight: bold; text-align: center;">#</div>
+                            <div style="flex: 2; font-weight: bold;">Jugador</div>
+                            <div style="flex: 1; font-weight: bold; text-align: right;">Pts</div>
+                        </div>
+                `;
+                
+                jugadoresOrdenados.forEach((jugador, index) => {
+                    const esGanador = index === 0;
+                    const bgColor = esGanador ? 'linear-gradient(135deg, var(--amarillo), #ffd700)' : 'var(--blanco)';
+                    const color = esGanador ? 'var(--verde-oscuro)' : 'inherit';
+                    
+                    html += `
+                        <div style="display: flex; padding: 8px; border-bottom: 1px solid var(--gris-medio); background: ${bgColor}; color: ${color}; font-size: 0.8rem;">
+                            <div style="flex: 1; text-align: center; font-weight: ${esGanador ? 'bold' : 'normal'}">${index + 1}</div>
+                            <div style="flex: 2; font-weight: ${esGanador ? 'bold' : 'normal'}">${jugador.nombre}</div>
+                            <div style="flex: 1; text-align: right; font-weight: ${esGanador ? 'bold' : 'normal'}">${jugador.puntos}</div>
+                        </div>
+                    `;
+                });
+                
+                if (jugadoresOrdenados.length > 0) {
+                    const ganador = jugadoresOrdenados[0];
+                    html += `
+                        <div style="margin-top: 12px; padding: 8px; background: linear-gradient(135deg, var(--verde-claro), var(--blanco)); border-radius: var(--borde-radius); text-align: center; font-size: 0.9rem;">
+                            <div style="color: var(--verde-oscuro); font-weight: bold;">
+                                <i class="fas fa-crown" style="color: var(--dorado);"></i> ${ganador.nombre}
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--gris-oscuro);">
+                                ${ganador.puntos} puntos
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                html += `</div>`;
+                
+                this.tablaResultados.innerHTML = html;
+            }
+
+            nuevaPartida() {
+                if (confirm('¿Nueva partida?')) {
+                    this.jugadores = 6;
+                    this.jugadoresData = [];
+                    this.rondas = [];
+                    this.rondaActual = 1;
+                    this.turnoActual = 0;
+                    this.apuestasRonda = [];
+                    this.partidaActiva = false;
+                    this.triunfoActual = null;
+                    this.triunfoMostrado = false;
+                    
+                    this.btnJugadores.forEach(btn => {
+                        btn.classList.remove('active');
+                        if (parseInt(btn.dataset.jugadores) === 6) {
+                            btn.classList.add('active');
+                        }
+                    });
+                    
+                    this.mostrarSeccion('menu');
+                    this.actualizarEstructuraInfo();
+                    this.actualizarConfigInfo();
+                }
+            }
+
+            volverAlMarcador() {
+                if (this.partidaActiva) {
+                    this.mostrarSeccion('marcador');
+                }
+            }
+
+            mostrarSeccion(seccion) {
+                document.querySelectorAll('.section').forEach(s => {
+                    s.classList.remove('active');
+                });
+                
+                if (seccion === 'menu') this.menuSection.classList.add('active');
+                else if (seccion === 'config') this.configSection.classList.add('active');
+                else if (seccion === 'turno') this.turnoSection.classList.add('active');
+                else if (seccion === 'marcador') this.marcadorSection.classList.add('active');
+                else if (seccion === 'resultados') this.resultadosSection.classList.add('active');
+            }
+        }
+
+        // Inicializar juego
+        document.addEventListener('DOMContentLoaded', () => {
+            window.galiPocha = new GaliPochaGame();
+            
+            // Efecto de carga
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.3s';
+                document.body.style.opacity = '1';
+            }, 100);
+            
+            // Prevenir zoom
+            document.addEventListener('touchstart', (e) => {
+                if (e.touches.length > 1) e.preventDefault();
+            }, { passive: false });
+            
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', (e) => {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) e.preventDefault();
+                lastTouchEnd = now;
+            }, false);
+            
+            console.log('📱 GaliPocha by Ferteam - Con clasificación y triunfos');
+        });
+    </script>
+</body>
+</html>
