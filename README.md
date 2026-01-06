@@ -95,7 +95,7 @@ Esta app está desplegada en **GitHub Pages**:
 
 ---
 
-*Desarrollado con ❤️ por Ferteam - 2024*  
+*Desarrollado por Ferteam - 2026*  
 *Para amantes del juego de la pocha 🃏*
 
 **¡Disfruta de tus partidas!**
