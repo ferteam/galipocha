@@ -1,0 +1,2 @@
+# Este archivo está intencionalmente vacío
+# Sirve para desactivar Jekyll en GitHub Pages

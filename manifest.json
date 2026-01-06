@@ -1,0 +1,27 @@
+{
+  "name": "GaliPocha by Ferteam",
+  "short_name": "GaliPocha",
+  "description": "Marcador móvil para el juego de la pocha",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1a5d1a",
+  "theme_color": "#1a5d1a",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "utilities"]
+}
